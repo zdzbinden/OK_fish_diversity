@@ -1,0 +1,784 @@
+> ### 2 | MODEL SELECTION ---------------------------------------------------
+> ### _2.1 | Taxon Alpha ---------------------------------------------------
+> ### ___ environmental selection ---------------------------------------------------
+> library("vegan")
+> ####### forward model selection for each variable set
+> ### instream
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ instream_PC1 + instream_PC2 + instream_PC3, data = env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)   
+Model      3   1.3311 5.0697  0.002 **
+Residual 134  11.7280                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++ mod0 <- rda(taxon.alpha$Species_Richness ~1, data=env.instream.PCs)
++ mod1 <- rda(taxon.alpha$Species_Richness ~., data=env.instream.PCs)
++ model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                    R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++ model$anova
++ terms <- attr(model$terminfo$terms,"term.labels")
++ red.env.instream.PCs<- subset(env.instream.PCs, select=terms)
++ } else {
++ red.env.instream.PCs<-data.frame(row.names = rownames(env.instream.PCs)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F  Pr(>F)   
++ instream_PC3  0.049946  1 349.50 8.2023 0.00486 **
++ instream_PC2  0.078879  1 346.22 5.2719 0.02253 * 
+<All variables> 0.081826                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### hydrophysio
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ hydrophysio_PC1 + hydrophysio_PC2 + hydrophysio_PC3, data = env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)  
+Model      3   0.6787 2.4486  0.073 .
+Residual 134  12.3805                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=env.hydrophysio.PCs)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=env.hydrophysio.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.hydrophysio.PCs<- subset(env.hydrophysio.PCs, select=terms)
++ } else {
++   red.env.hydrophysio.PCs<-data.frame(row.names = rownames(env.hydrophysio.PCs)) 
++ }
+> model$anova
+NULL
+> remove(mod0,mod1,model)
+> 
+> ### climate
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ climate_PC1 + climate_PC2 + climate_PC3 + climate_PC4, data = env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      4   0.3286 0.8584  0.478
+Residual 133  12.7305              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=env.climate.PCs)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=env.climate.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.climate.PCs<- subset(env.climate.PCs, select=terms)
++ } else {
++   red.env.climate.PCs<-data.frame(row.names = rownames(env.climate.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### landcover
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ landcover_PC1 + landcover_PC2 + landcover_PC3 + landcover_PC4 + landcover_PC5 + landcover_PC6, data = env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)  
+Model      6   1.2495 2.3101  0.028 *
+Residual 131  11.8096                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=env.landcover.PCs)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=env.landcover.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.landcover.PCs<- subset(env.landcover.PCs, select=terms)
++ } else {
++   red.env.landcover.PCs<-data.frame(row.names = rownames(env.landcover.PCs)) 
++ }
+> model$anova
+                  R2.adj Df    AIC     F  Pr(>F)  
++ landcover_PC2 0.026505  1 352.87 4.730 0.03154 *
++ landcover_PC6 0.052281  1 350.15 4.699 0.03194 *
+<All variables> 0.054264                          
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### geology
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= env.geology.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ geology_PC1 + geology_PC2, data = env.geology.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      2   0.2357 1.2405  0.297
+Residual 135  12.8235              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=env.geology.PCs)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=env.geology.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.geology.PCs<- subset(env.geology.PCs, select=terms)
++ } else {
++   red.env.geology.PCs<-data.frame(row.names = rownames(env.geology.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### anthropogenic
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ anthropogenic_PC1 + anthropogenic_PC2 + anthropogenic_PC3, data = env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      3   0.5873 2.1035  0.112
+Residual 134  12.4718              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=env.anthropogenic.PCs)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=env.anthropogenic.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.anthropogenic.PCs<- subset(env.anthropogenic.PCs, select=terms)
++ } else {
++   red.env.anthropogenic.PCs<-data.frame(row.names = rownames(env.anthropogenic.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> #### combine sig factors from model selection into one dataframe
+> ENV_select <- cbind.data.frame(red.env.instream.PCs,red.env.hydrophysio.PCs,red.env.climate.PCs,red.env.landcover.PCs,red.env.geology.PCs,red.env.anthropogenic.PCs)
+> usdm::vif(ENV_select)
+      Variables      VIF
+1  instream_PC3 1.020589
+2  instream_PC2 1.013836
+3 landcover_PC2 1.015141
+4 landcover_PC6 1.019284
+> rda<-rda(taxon.alpha$Species_Richness ~., data= ENV_select)
+> RsquareAdj(rda)
+$r.squared
+[1] 0.1432819
+
+$adj.r.squared
+[1] 0.1175159
+
+> anova(rda)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ instream_PC3 + instream_PC2 + landcover_PC2 + landcover_PC6, data = ENV_select)
+          Df Variance      F Pr(>F)   
+Model      4   1.8711 5.5609  0.003 **
+Residual 133  11.1880                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #sig.terms<-anova(rda, by="term", permutations=99999)
+> #sig.terms
+> ### remove non-sig vars
+> #terms <- as.data.frame(attr(rda$terminfo$terms,"term.labels"))
+> #terms[,2]<-sig.terms$`Pr(>F)`[-(length(sig.terms$`Pr(>F)`-1))]
+> #terms<-terms[terms$V2<0.1,]
+> #ENV_select<-subset(ENV_select, select=terms$`attr(rda$terminfo$terms, "term.labels")`)
+> #vif<-usdm::vifstep(ENV_select, th=10)
+> #ENV_select<-usdm::exclude(ENV_select, vif)
+> #remove(rda,sig.terms,terms,vif)
+> 
+> 
+> ### ___ spatial selection ---------------------------------------------------
+> ####### forward model selection for each variable set
+> ######## SP_MEM_LAND
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ LAND_MEM1 + LAND_MEM2 + LAND_MEM3 + LAND_MEM4 + LAND_MEM5 + LAND_MEM6 + LAND_MEM7 + LAND_MEM8 + LAND_MEM9 + LAND_MEM10 + LAND_MEM11 + LAND_MEM12 + LAND_MEM13 + LAND_MEM14 + LAND_MEM15 + LAND_MEM16 + LAND_MEM17 + LAND_MEM18 + LAND_MEM19 + LAND_MEM20 + LAND_MEM21 + LAND_MEM22 + LAND_MEM23 + LAND_MEM24 + LAND_MEM25 + LAND_MEM26 + LAND_MEM27 + LAND_MEM28 + LAND_MEM29 + LAND_MEM30 + LAND_MEM31 + LAND_MEM32 + LAND_MEM33 + LAND_MEM34 + LAND_MEM35 + LAND_MEM36 + 
+    LAND_MEM37 + LAND_MEM38 + LAND_MEM39 + LAND_MEM40 + LAND_MEM41 + LAND_MEM42 + LAND_MEM43 + LAND_MEM44, data = SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+         Df Variance      F Pr(>F)
+Model    44   4.3291 1.0481  0.424
+Residual 93   8.7301              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_MEM_LAND)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_MEM_LAND)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_LAND<- subset(SP_MEM_LAND, select=terms)
++ } else {
++   red.SP_MEM_LAND<-data.frame(row.names = rownames(SP_MEM_LAND)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ######## SP_MEM_HYDRO
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ HYDRO_MEM1 + HYDRO_MEM2 + HYDRO_MEM3 + HYDRO_MEM4 + HYDRO_MEM5 + HYDRO_MEM6 + HYDRO_MEM7 + HYDRO_MEM8, data = SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      8    0.360 0.4571  0.895
+Residual 129   12.699              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_MEM_HYDRO)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_MEM_HYDRO)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_HYDRO<- subset(SP_MEM_HYDRO, select=terms)
++ } else {
++   red.SP_MEM_HYDRO<-data.frame(row.names = rownames(SP_MEM_HYDRO)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_MEM_UPSTR_TOTAL
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ UPTOTAL_MEM1 + UPTOTAL_MEM2 + UPTOTAL_MEM3 + UPTOTAL_MEM4 + UPTOTAL_MEM5 + UPTOTAL_MEM6 + UPTOTAL_MEM7 + UPTOTAL_MEM8 + UPTOTAL_MEM9 + UPTOTAL_MEM10 + UPTOTAL_MEM11 + UPTOTAL_MEM12 + UPTOTAL_MEM13 + UPTOTAL_MEM14 + UPTOTAL_MEM15 + UPTOTAL_MEM16 + UPTOTAL_MEM17 + UPTOTAL_MEM18 + UPTOTAL_MEM19 + UPTOTAL_MEM20 + UPTOTAL_MEM21 + UPTOTAL_MEM22 + UPTOTAL_MEM23 + UPTOTAL_MEM24 + UPTOTAL_MEM25 + UPTOTAL_MEM26 + UPTOTAL_MEM27 + UPTOTAL_MEM28 + UPTOTAL_MEM29 + UPTOTAL_MEM30, 
+    data = SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     30   3.3289 1.2202  0.227
+Residual 107   9.7303              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_MEM_UPSTR_TOTAL)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_MEM_UPSTR_TOTAL)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_TOTAL<- subset(SP_MEM_UPSTR_TOTAL, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_TOTAL<-data.frame(row.names = rownames(SP_MEM_UPSTR_TOTAL)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_MEM_UPSTR_NET
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_MEM_UPSTR_NET, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ UPNET_MEM1 + UPNET_MEM2 + UPNET_MEM3 + UPNET_MEM4 + UPNET_MEM5 + UPNET_MEM6 + UPNET_MEM7 + UPNET_MEM8 + UPNET_MEM9 + UPNET_MEM10 + UPNET_MEM11 + UPNET_MEM12 + UPNET_MEM13 + UPNET_MEM14 + UPNET_MEM15 + UPNET_MEM16 + UPNET_MEM17 + UPNET_MEM18 + UPNET_MEM19 + UPNET_MEM20 + UPNET_MEM21 + UPNET_MEM22 + UPNET_MEM23 + UPNET_MEM24 + UPNET_MEM25 + UPNET_MEM26 + UPNET_MEM27 + UPNET_MEM28 + UPNET_MEM29 + UPNET_MEM30 + UPNET_MEM31 + UPNET_MEM32, data = SP_MEM_UPSTR_NET, 
+    sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     32   3.7937 1.3435  0.135
+Residual 105   9.2655              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_MEM_UPSTR_NET)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_MEM_UPSTR_NET)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_NET<- subset(SP_MEM_UPSTR_NET, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_NET<-data.frame(row.names = rownames(SP_MEM_UPSTR_NET)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_UW
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TD_UW_V1 + AEM_TD_UW_V2 + AEM_TD_UW_V3 + AEM_TD_UW_V5 + AEM_TD_UW_V6 + AEM_TD_UW_V7 + AEM_TD_UW_V9 + AEM_TD_UW_V12 + AEM_TD_UW_V17 + AEM_TD_UW_V18 + AEM_TD_UW_V20 + AEM_TD_UW_V24 + AEM_TD_UW_V28 + AEM_TD_UW_V129, data = SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     14   0.9417 0.6828  0.789
+Residual 123  12.1174              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_AEM_TDN_UW)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_AEM_TDN_UW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_UW<- subset(SP_AEM_TDN_UW, select=terms)
++ } else {
++   red.SP_AEM_TDN_UW<-data.frame(row.names = rownames(SP_AEM_TDN_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DAMW
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TD_DAM_V1 + AEM_TD_DAM_V2 + AEM_TD_DAM_V3 + AEM_TD_DAM_V4 + AEM_TD_DAM_V5 + AEM_TD_DAM_V6 + AEM_TD_DAM_V7 + AEM_TD_DAM_V8 + AEM_TD_DAM_V10 + AEM_TD_DAM_V11 + AEM_TD_DAM_V16 + AEM_TD_DAM_V17 + AEM_TD_DAM_V24 + AEM_TD_DAM_V32 + AEM_TD_DAM_V116, data = SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     15   1.1438 0.7807  0.704
+Residual 122  11.9154              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_AEM_TDN_DAMW)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_AEM_TDN_DAMW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DAMW<- subset(SP_AEM_TDN_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DAMW<-data.frame(row.names = rownames(SP_AEM_TDN_DAMW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DISTW
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TD_DIST_V1 + AEM_TD_DIST_V2 + AEM_TD_DIST_V3 + AEM_TD_DIST_V5 + AEM_TD_DIST_V6 + AEM_TD_DIST_V7 + AEM_TD_DIST_V8 + AEM_TD_DIST_V9 + AEM_TD_DIST_V11 + AEM_TD_DIST_V12 + AEM_TD_DIST_V13 + AEM_TD_DIST_V17 + AEM_TD_DIST_V19 + AEM_TD_DIST_V28 + AEM_TD_DIST_V44, data = SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     15    1.347 0.9354  0.508
+Residual 122   11.712              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_AEM_TDN_DISTW)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_AEM_TDN_DISTW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DISTW<- subset(SP_AEM_TDN_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DISTW<-data.frame(row.names = rownames(SP_AEM_TDN_DISTW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_UW
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_UW_V1 + AEM_TU_UW_V2 + AEM_TU_UW_V3 + AEM_TU_UW_V4 + AEM_TU_UW_V7 + AEM_TU_UW_V13 + AEM_TU_UW_V14 + AEM_TU_UW_V18 + AEM_TU_UW_V27 + AEM_TU_UW_V43 + AEM_TU_UW_V90 + AEM_TU_UW_V91 + AEM_TU_UW_V95 + AEM_TU_UW_V96 + AEM_TU_UW_V98 + AEM_TU_UW_V99 + AEM_TU_UW_V101 + AEM_TU_UW_V102 + AEM_TU_UW_V103 + AEM_TU_UW_V105 + AEM_TU_UW_V106 + AEM_TU_UW_V109 + AEM_TU_UW_V111 + AEM_TU_UW_V131, data = SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     24   2.9419 1.3691  0.144
+Residual 113  10.1172              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_AEM_TUP_UW)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_AEM_TUP_UW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_UW<- subset(SP_AEM_TUP_UW, select=terms)
++ } else {
++   red.SP_AEM_TUP_UW<-data.frame(row.names = rownames(SP_AEM_TUP_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_DAMW 
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DAM_V1 + AEM_TU_DAM_V2 + AEM_TU_DAM_V3 + AEM_TU_DAM_V4 + AEM_TU_DAM_V6 + AEM_TU_DAM_V7 + AEM_TU_DAM_V23 + AEM_TU_DAM_V45 + AEM_TU_DAM_V48 + AEM_TU_DAM_V92 + AEM_TU_DAM_V100 + AEM_TU_DAM_V104 + AEM_TU_DAM_V105 + AEM_TU_DAM_V109 + AEM_TU_DAM_V117 + AEM_TU_DAM_V120, data = SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)  
+Model     16   2.6944 1.9659  0.022 *
+Residual 121  10.3647                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_AEM_TUP_DAMW)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_AEM_TUP_DAMW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DAMW<- subset(SP_AEM_TUP_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DAMW<-data.frame(row.names = rownames(SP_AEM_TUP_DAMW)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F  Pr(>F)   
++ AEM_TU_DAM_V1 0.071676  1 346.31 11.578 0.00106 **
+<All variables> 0.101373                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TUP_DISTW
+> rda<-rda(taxon.alpha$Species_Richness ~ ., data= SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DIST_V1 + AEM_TU_DIST_V2 + AEM_TU_DIST_V3 + AEM_TU_DIST_V4 + AEM_TU_DIST_V7 + AEM_TU_DIST_V13 + AEM_TU_DIST_V19 + AEM_TU_DIST_V44 + AEM_TU_DIST_V50 + AEM_TU_DIST_V75 + AEM_TU_DIST_V83 + AEM_TU_DIST_V110 + AEM_TU_DIST_V113 + AEM_TU_DIST_V114 + AEM_TU_DIST_V117 + AEM_TU_DIST_V118 + AEM_TU_DIST_V120 + AEM_TU_DIST_V126 + AEM_TU_DIST_V128, data = SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)  
+Model     19   3.1925 2.0095  0.011 *
+Residual 118   9.8666                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(taxon.alpha$Species_Richness ~1, data=SP_AEM_TUP_DISTW)
++   mod1 <- rda(taxon.alpha$Species_Richness ~., data=SP_AEM_TUP_DISTW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DISTW<- subset(SP_AEM_TUP_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DISTW<-data.frame(row.names = rownames(SP_AEM_TUP_DISTW)) 
++ }
+> model$anova
+                   R2.adj Df    AIC      F  Pr(>F)    
++ AEM_TU_DIST_V1 0.089472  1 343.64 14.462 0.00025 ***
+<All variables>  0.122814                             
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### GET SELECTED TERMS
+> SP_select<- cbind.data.frame(red.SP_MEM_LAND, red.SP_MEM_HYDRO, red.SP_MEM_UPSTR_TOTAL, 
++                              red.SP_MEM_UPSTR_NET, red.SP_AEM_TDN_UW, red.SP_AEM_TDN_DAMW, 
++                              red.SP_AEM_TDN_DISTW, red.SP_AEM_TUP_UW, red.SP_AEM_TUP_DAMW, red.SP_AEM_TUP_DISTW)
+> usdm::vif(SP_select)
+       Variables      VIF
+1  AEM_TU_DAM_V1 28.67633
+2 AEM_TU_DIST_V1 28.67633
+> ### multiple regression test to confirm all terms are significantly related to response
+> rda<-rda(taxon.alpha$Species_Richness~., data= SP_select)
+> RsquareAdj(rda)
+$r.squared
+[1] 0.113308
+
+$adj.r.squared
+[1] 0.1001718
+
+> anova(rda)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DAM_V1 + AEM_TU_DIST_V1, data = SP_select)
+          Df Variance      F Pr(>F)    
+Model      2   1.4797 8.6256  0.001 ***
+Residual 135  11.5794                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> sig.terms<-anova(rda, by="term", permutations=99999)
+> sig.terms
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DAM_V1 + AEM_TU_DIST_V1, data = SP_select)
+                Df Variance       F  Pr(>F)   
+AEM_TU_DAM_V1    1   1.0245 11.9444 0.00102 **
+AEM_TU_DIST_V1   1   0.4552  5.3069 0.02206 * 
+Residual       135  11.5794                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> ### remove non-sig vars
+> terms <- as.data.frame(attr(rda$terminfo$terms,"term.labels"))
+> terms[,2]<-sig.terms$`Pr(>F)`[-(length(sig.terms$`Pr(>F)`-1))]
+> terms<-terms[terms$V2<0.05,]
+> SP_select<-subset(SP_select, select=terms$`attr(rda$terminfo$terms, "term.labels")`)
+> #vif<-usdm::vifstep(SP_select, th=10)
+> #SP_select<-usdm::exclude(SP_select, vif)
+> SP_select<-SP_select$AEM_TU_DIST_V1
+> SP_select<- as.data.frame(SP_select)
+> colnames(SP_select)<-c("AEM_TU_DIST_V1")
+> #remove(rda, sig.terms, terms, vif)
+
+> ### ___ variation partitioning ---------------------------------------------------
+> ### Partial redundancy analysis of models (taxon alpha)
+> ### partial RDA of full environmental set
+> comb <- cbind(SP_select, ENV_select)
+> rda.all<-rda(taxon.alpha$Species_Richness ~ ., data=comb)
+> RsquareAdj(rda.all)
+$r.squared
+[1] 0.1734434
+
+$adj.r.squared
+[1] 0.1421345
+
+> anova(rda.all)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DIST_V1 + instream_PC3 + instream_PC2 + landcover_PC2 + landcover_PC6, data = comb)
+          Df Variance      F Pr(>F)    
+Model      5    2.265 5.5397  0.001 ***
+Residual 132   10.794                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #anova(rda.all, by="term", permutations=99999)
+> #### Partial Redundancy Analysis of selected model from procedure above
+> partial.reg <- varpart(taxon.alpha$Species_Richness, SP_select, ENV_select)
+> partial.reg
+
+Partition of variance in RDA 
+
+Call: varpart(Y = taxon.alpha$Species_Richness, X = SP_select, ENV_select)
+
+Explanatory tables:
+X1:  SP_select
+X2:  ENV_select 
+
+No. of explanatory tables: 2 
+Total variation (SS): 1789.1 
+            Variance: 13.059 
+No. of observations: 138 
+
+Partition table:
+                     Df R.squared Adj.R.squared Testable
+[a+b] = X1            1   0.09612       0.08947     TRUE
+[b+c] = X2            4   0.14328       0.11752     TRUE
+[a+b+c] = X1+X2       5   0.17344       0.14213     TRUE
+Individual fractions                                    
+[a] = X1|X2           1                 0.02462     TRUE
+[b]                   0                 0.06485    FALSE
+[c] = X2|X1           4                 0.05266     TRUE
+[d] = Residuals                         0.85787    FALSE
+---
+Use function ‘rda’ to test significance of fractions of interest
+> 
+> #### TESTING SIGNIFICANCE OF FRACTIONS
+> #### fraction [a]:
+> rda.pure.spatial<-rda(taxon.alpha$Species_Richness ~ . + Condition(as.matrix(ENV_select)), data=SP_select)
+> RsquareAdj(rda.pure.spatial)
+$r.squared
+[1] 0.03016158
+
+$adj.r.squared
+[1] 0.02461858
+
+> anova(rda.pure.spatial)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DIST_V1 + Condition(as.matrix(ENV_select)), data = SP_select)
+          Df Variance      F Pr(>F)  
+Model      1   0.3939 4.8168  0.036 *
+Residual 132  10.7941                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.pure.spatial, by="term", permutations=99999)
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DIST_V1 + Condition(as.matrix(ENV_select)), data = SP_select)
+                Df Variance      F  Pr(>F)  
+AEM_TU_DIST_V1   1   0.3939 4.8168 0.03034 *
+Residual       132  10.7941                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [c]:
+> rda.pure.environ<-rda(taxon.alpha$Species_Richness ~ . + Condition(as.matrix(SP_select)), data=ENV_select)
+> RsquareAdj(rda.pure.environ)
+$r.squared
+[1] 0.07732515
+
+$adj.r.squared
+[1] 0.05266238
+
+> anova(rda.pure.environ)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ instream_PC3 + instream_PC2 + landcover_PC2 + landcover_PC6 + Condition(as.matrix(SP_select)), data = ENV_select)
+          Df Variance      F Pr(>F)  
+Model      4   1.0098 3.0872  0.018 *
+Residual 132  10.7941                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.pure.environ, by="term", permutations=99999)
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ instream_PC3 + instream_PC2 + landcover_PC2 + landcover_PC6 + Condition(as.matrix(SP_select)), data = ENV_select)
+               Df Variance      F  Pr(>F)  
+instream_PC3    1   0.2712 3.3165 0.07070 .
+instream_PC2    1   0.2102 2.5702 0.11323  
+landcover_PC2   1   0.2748 3.3604 0.06842 .
+landcover_PC6   1   0.2536 3.1016 0.08085 .
+Residual      132  10.7941                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [a+b]:
+> rda.spatial<-rda(taxon.alpha$Species_Richness ~., data= SP_select)
+> RsquareAdj(rda.spatial)
+$r.squared
+[1] 0.0961183
+
+$adj.r.squared
+[1] 0.08947211
+
+> anova(rda.spatial)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ AEM_TU_DIST_V1, data = SP_select)
+          Df Variance      F Pr(>F)    
+Model      1   1.2552 14.462  0.001 ***
+Residual 136  11.8039                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [b+c]:
+> rda.envrion<-rda(taxon.alpha$Species_Richness ~ ., data= ENV_select)
+> RsquareAdj(rda.envrion)
+$r.squared
+[1] 0.1432819
+
+$adj.r.squared
+[1] 0.1175159
+
+> anova(rda.envrion)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ instream_PC3 + instream_PC2 + landcover_PC2 + landcover_PC6, data = ENV_select)
+          Df Variance      F Pr(>F)   
+Model      4   1.8711 5.5609  0.002 **
+Residual 133  11.1880                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.envrion, by="term", permutations=99999)
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = taxon.alpha$Species_Richness ~ instream_PC3 + instream_PC2 + landcover_PC2 + landcover_PC6, data = ENV_select)
+               Df Variance      F  Pr(>F)   
+instream_PC3    1   0.7428 8.8304 0.00365 **
+instream_PC2    1   0.4629 5.5027 0.02077 * 
+landcover_PC2   1   0.3953 4.6987 0.03181 * 
+landcover_PC6   1   0.2702 3.2118 0.07541 . 
+Residual      133  11.1880                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

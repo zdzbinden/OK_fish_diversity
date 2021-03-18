@@ -1,0 +1,229 @@
+rm(list=ls()) # cleaning memory
+
+##############################################################################################
+# sourcing "homemade" R functions
+
+# setting working directory
+my_path<-"/Volumes/Data/tutorial_FD" #  <= PUT direction of the folder where you saved the zipfile containing functions and data
+
+# loading functions
+setwd( paste(my_path,"/functions", sep="") ) # folder where R functions have been saved
+source("quality_funct_space.R")
+source("plot_funct_space.R")
+source("multidimFD.R")
+source("multidimFbetaD.R")
+
+##############################################################################################
+# IMPORTING DATASETS
+
+setwd( paste(my_path,"/data", sep="") ) # folder where data have been saved
+
+# importing biomass of species in assemblages from a txt file: species names are in the first column and will be used as row names
+weight_fruits_baskets<-read.table("weight_fruits_baskets.txt", header=T, row.names =1)
+weight_fruits_baskets<-as.matrix(weight_fruits_baskets)
+weight_fruits_baskets
+
+############################################
+
+# importing species raw trait values from a txt file: row names are in the column named 'Species'
+traits_raw_fruits<-read.table("traits_raw_fruits.txt", header=T, row.names = "Species")
+
+# checking that species names are the same in the two matrices
+sum( row.names(traits_raw_fruits) %in% colnames(weight_fruits_baskets) ) == ncol(weight_fruits_baskets)
+
+# looking at trait coding after importing data
+traits_raw_fruits
+summary(traits_raw_fruits) # all traits but 'Sugar_content' are considered as categorical while some should be coded as ordinal
+# => need to set correct type of variables
+
+
+# empty dataframe to store trait values
+traits_fruits<-as.data.frame( matrix(NA, nrow(traits_raw_fruits), ncol(traits_raw_fruits), 
+                  dimnames=list( row.names(traits_raw_fruits), names(traits_raw_fruits) ) ) ) 
+  
+# ordinal traits converted to "ordered" mode
+traits_fruits[,"Size"]<-factor(traits_raw_fruits[,"Size"], levels=c("0-1cm", "1-3cm", "3-5cm", "5-10cm", "10-20cm" ), labels = c("very_small", "small", "medium", "large", "very_large" ), ordered = TRUE )
+traits_fruits[,"Plant"]<-traits_raw_fruits[,"Plant"]
+traits_fruits[,"Origin"]<-factor(traits_raw_fruits[,"Origin"], levels=c("temperate", "subtropical", "tropical" ), ordered = TRUE )
+traits_fruits[,"Seed"]<-factor(traits_raw_fruits[,"Seed"], levels=c("none", "pit", "pip" ), ordered = TRUE )
+traits_fruits[,"Sugar_content"]<-as.numeric( traits_raw_fruits[,"Sugar_content"] )
+
+# comparing before/after conversion
+is.ordered(traits_raw_fruits[,"Size"])
+is.ordered(traits_fruits[,"Size"])
+
+
+# species names and codes (for graphics)
+species_names<-row.names(traits_fruits)
+species_codes<-substr(species_names,1,4) ; names(species_codes)<-species_names # codes = 4 first letters of species name
+length(unique(species_codes))==length(species_names) # False
+summary(as.factor(species_codes)) # grappefruit and grape has same code
+species_codes["grapefruit"]<-"graf" # new code for grapefruit
+length(unique(species_codes))==length(species_names) # OK
+
+
+##############################################################################################
+##############################################################################################
+# FUNCTIONAL SPACE
+
+setwd( paste(my_path,"/results/plot_funct_space", sep="") )  # setting working directory for results
+
+# computing all functional spaces based on dendrogram or PCoA (up to 10 axes)
+# NOTE: you need to be connected to internet for a correct functioning of quality_funct_space function
+
+qual_funct_space<-quality_funct_space(traits_fruits, traits_weights=NULL, nbdim=10, metric="Gower", dendro=TRUE, plot="quality_funct_space_fruits")
+qual_funct_space$meanSD # => best space has 4 dimensions + have a look to the "quality_funct_space_fruits.jpeg" file in the /results folder
+# mean Squared-Deviation of 0.0029 means that average deviation between Euclidean distance and Gower's distance is of (0.0029)^0.5=0.054, so it can be seen like an average error of 5%
+
+# species coordinates in the best space
+coord_fruits_4D<-qual_funct_space$details_funct_space$mat_coord[,1:4]
+
+#################################
+# few examples of how exploring functional space
+
+# plot of 4D functional space => look to the jpeg file in the ".../results/plot_funct_space" folder
+plot_funct_space( coord_fruits_4D,col_sp="blue", pch_sp=21, nm_jpeg="Fspace_fruits_4D.jpeg", cex_sp=1.6, close_jpeg=TRUE   )
+
+# looking at position of all species in the 4D space
+plot_funct_space( coord_fruits_4D, Faxes=c( "PC1","PC2"), Faxes_lim=c(-0.58,0.48), col_sp="blue", pch_sp=species_codes, nm_jpeg="Fspace_fruits_codes_12.jpeg", cex_sp=0.6, close_jpeg=TRUE   )
+plot_funct_space( coord_fruits_4D, Faxes=c( "PC3","PC4"), Faxes_lim=c(-0.58,0.48), col_sp="blue", pch_sp=species_codes, nm_jpeg="Fspace_fruits_codes_34.jpeg", cex_sp=0.6, close_jpeg=TRUE   )
+
+# looking at position of 3 particular species on the 2 first PC axes
+plot_funct_space( coord_fruits_4D, Faxes=c( "PC1","PC2"), Faxes_lim=c(-0.55,0.45), col_sp="grey50", pch_sp="+", nm_jpeg="Fspace_fruits_12_3species.jpeg", cex_sp=0.6, close_jpeg=FALSE   ) # all species plotted with crosses, not closing the jpeg
+text(coord_fruits_4D[c("cherry","lime","lemon"),1:2], c("cherry","lime","lemon"), cex=0.8, col="red3" ) # adding species codes for only 3 species
+graphics.off() # closing the jpeg
+
+# looking at distribution of values for one trait in the functional space
+plot_funct_space( coord_fruits_4D, Faxes=c( "PC1","PC2"), Faxes_lim=c(-0.58,0.48), col_sp=as.factor(traits_fruits[,"Plant"]), pch_sp=21, nm_jpeg="Fspace_fruits_12_plant.jpeg", cex_sp=0.6, close_jpeg=FALSE   ) # points color defined according to values of this categorical trait, not closing the jpeg
+plot(0:5,0:5,type="n", axes=F,xlab="", ylab="") # empty plot for legend on the right panel
+points(rep(1.8,4), 1:4, pch=21, cex=2, bg=as.factor(levels(traits_fruits[,"Plant"])) ) 
+text(rep(2,4), 1:4, levels(traits_fruits[,"Plant"]), cex=2, adj=0 ) 
+graphics.off() # closing the jpeg
+
+##############################################################################################
+# illustration of bias induced by functional dendrogram or space of low dimensionality
+
+# functional differences between lime and lemon and lime and cherry
+
+# trait values
+traits_fruits[c("cherry","lime","lemon"),]
+
+# raw distance based on traits values 
+round(as.matrix(qual_funct_space$details_funct_space$mat_dissim)[c("cherry","lime","lemon"),c("cherry","lime","lemon")],3)
+# => lime is >3 times closer to lemon than to cherry
+
+##################################
+# plot of best functional dendrogram
+plot(qual_funct_space$details_funct_space$best_tree, sub="", main="UPGMA", xlab="", h=-1)
+# look at position of lime on the tree
+
+# cophenetic distance on best dendrogram 
+round(as.matrix(qual_funct_space$details_funct_space$dist_raw$t_UPGMA)[c("cherry","lime","lemon"),c("cherry","lime","lemon")],3) 
+# lime as far to lemon than to cherry => dendrogram overestimates distance between some pairs of species actually close
+
+# most extreme species is the pineapple
+round(as.matrix(qual_funct_space$details_funct_space$dist_raw$t_UPGMA)["pineapple",],2) 
+# by definition of an ultrametric dendrogram, a species is at the same distance to all species not on the same main branch (i.e. descending from the root), here 0.56 for cophenetic distance between pineapple and all species but litchi, banana and mango.
+
+round( as.matrix(qual_funct_space$details_funct_space$mat_dissim)["pineapple",],2)
+# however trait-based distance between pineapple and these species actually ranges from 0.43 (melon) to 0.84 (grape), i.e. by almost a two-fold factor 
+# correlation between distance on the dendrogram vs Gower distance for pairs between pineapple and other fruits
+plot( x=as.matrix(qual_funct_space$details_funct_space$mat_dissim)["pineapple",], y=as.matrix(qual_funct_space$details_funct_space$dist_raw$t_UPGMA)["pineapple",], xlab="Gower Dist on trait values", ylab="Dist on UPGMA dendro", pch=16, cex=0.7  )
+# no strong correlation : 2 horizontal lines of points with the points close to y=0.4 corresponding to pineapple vs ( banana, litchi or mango)
+# and the points at y=0.56 corresponding to distance between pineapple and all other fruits
+# => dendrogram overestimates some distances and homogenize them (lower variability than with Gower distance)
+
+##################################
+# distance in the 2D space 
+round(as.matrix(qual_funct_space$details_funct_space$dist_raw$m_2D)[c("cherry","lime","lemon"),c("cherry","lime","lemon")],3)
+# lime 2.4 times closer to lemon than to cherry (instead of 3 based on trait values)
+# => look at position of these 3 species on PC1-PC2 on "Fspace_fruits_codes_12.jpeg", cherry is not that far from both Citrus species
+
+##################################
+# distance in the 4D space 
+round(as.matrix(qual_funct_space$details_funct_space$dist_raw$m_4D)[c("cherry","lime","lemon"),c("cherry","lime","lemon")],3)
+# lime 2.4 times closer to lemon than to cherry
+# => look at position of these 3 species on PC3-PC4 on "Fspace_fruits_4D.jpeg", cherry is far from both Citrus species
+
+# correlation between distance in the 4D space vs Gower distance for pairs between pineapple and other fruits
+plot( x=as.matrix(qual_funct_space$details_funct_space$mat_dissim)["pineapple",], y=as.matrix(qual_funct_space$details_funct_space$dist_raw$m_4D)["pineapple",], xlab="Gower Dist on trait values", ylab="Dist in 4D space", pch=16, cex=0.7  )
+# strong correlation between Euclidean distance in the 4D space and Gower distance => no overestimation, no homogenization
+
+##############################################################################################
+##############################################################################################
+
+# MULTIDIMENSIONAL FUNCTIONAL DIVERISTY INDICES
+
+# computing Functional diversity indices with plots of FD indices put in a subfolder named plot_FD
+
+FD_baskets<-multidimFD(coord_fruits_4D, weight_fruits_baskets, check_species_pool=TRUE, verb=TRUE,
+                      nm_asb_plot=row.names(weight_fruits_baskets), folder_plot= paste(my_path,"/results/plot_FD", sep=""),
+                      Faxes_plot=colnames(coord_fruits_4D)[1:4], Faxes_nm_plot=colnames(coord_fruits_4D)[1:4],
+                      plot_pool=TRUE, col_bg="grey90", col_sp_pool="grey30",  pch_sp_pool="+", cex_sp_pool=1, 
+                      pch_sp=21, col_sp="#1E90FF", transp=50 )
+
+# printing results = rounded FD indices values
+round(FD_baskets,3)
+
+
+# look to the folder "../results/plot_FD"
+##############################################################################################
+# MULTIDIMENSIONAL FUNCTIONAL BETA DIVERISTY INDICES
+
+# occurences from species weights
+occ_fruits_baskets<-weight_fruits_baskets
+occ_fruits_baskets[which(occ_fruits_baskets>0)]<-1
+
+# indices computation for all pairs of asssemblages, plot only on 3 first axes
+FbetaD_baskets<-multidimFbetaD ( coord=coord_fruits_4D,  occ=occ_fruits_baskets,  check_species_pool=FALSE, verb=TRUE,
+                  nm_asb_plot=row.names(occ_fruits_baskets) , folder_plot= paste(my_path,"/results/plot_FbetaD", sep="") , 
+                  Faxes_plot=colnames(coord_fruits_4D)[1:3] , Faxes_nm_plot=colnames(coord_fruits_4D)[1:3] )
+
+# printing results
+FbetaD_baskets
+
+# look to the folder "../results/plot_FbetaD"
+
+##############################################################################################
+# saving R objects
+
+setwd( paste(my_path,"/results", sep="") ) # setting working directory for results
+
+save(traits_fruits, file="traits_fruits")
+save(weight_fruits_baskets, file="weight_fruits_baskets")
+save(species_codes, file="species_codes")
+save(coord_fruits_4D, file="coord_fruits_4D")
+save(FD_baskets, file="FD_baskets")
+save(FbetaD_baskets, file="FbetaD_baskets")
+
+##############################################################################################
+# Going one step further: example of how running a null model
+# here we want to test H0: Basket_4 results from a random sorting of species in the regional species pool (i.e. all species) given its species richness (SR). To keep the example simple, will focus only on FRic index so taking into account only species composition, not species weights.
+
+
+# picking assemblages of SR(basket_4) species at random among the 25 fruits
+nbrep<-99 # number of replicates
+SR_basket_4<-FD_baskets["basket_4","Nb_sp"]
+SR_basket_4 # 8 species`
+
+# empty matrix to store simulated species occurences
+basket_4_H0<-matrix(0, nbrep, ncol(weight_fruits_baskets), dimnames=list(1:nbrep, colnames(weight_fruits_baskets) ) )
+for (k in 1:nbrep)
+{
+  basket_4_H0[k, sample(  colnames(weight_fruits_baskets), SR_basket_4) ]<-1 # random sorting of species
+}# end of k
+
+# computing FD indices on these assemblages, check_species_pool=FALSE since by chance some species could be never picked but this is not an issue
+FD_basket_4_H0<-multidimFD(coord_fruits_4D, basket_4_H0,  check_species_pool=FALSE )
+
+# comparing observed and expected values under H0 using SES and p-value metrics
+SES_FRic_basket_4<- (FD_baskets["basket_4","FRic"]-mean(FD_basket_4_H0[,"FRic"]) ) / sd(FD_basket_4_H0[,"FRic"])
+SES_FRic_basket_4 # SES<(-1) means that observed FRic is lower than expected
+  
+pvalue_FRic_basket_4<- length(which(FD_baskets["basket_4","FRic"]<=FD_basket_4_H0[,"FRic"]))/ ( length(FD_basket_4_H0[,"FRic"]) +1 )
+pvalue_FRic_basket_4 # p-value >0.975 => FRic is significantly lower than expected under H0
+
+
+##############################################################################################
+# END
+##############################################################################################

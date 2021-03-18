@@ -1,0 +1,24 @@
+,PC1,PC2,PC3
+Standard deviation,1.93,1.50,1.36
+Proportion of Variance,0.18,0.11,0.09
+Cumulative Proportion,0.18,0.28,0.37
+canopy.cover.percent,0.30,-0.27,0.19
+cwd.presence,0.21,0.32,0.00
+sand.percent,0.21,-0.14,-0.30
+pasture.riparian,0.18,-0.24,-0.20
+bank.incision,0.16,0.28,-0.43
+pool.percent,0.10,0.28,0.23
+max.stream.depth,0.01,0.45,-0.12
+gravel.percent,0.00,-0.18,0.03
+sub.structure.presence,-0.03,0.08,0.04
+backwater.percent,-0.03,0.10,0.29
+algae.presence,-0.13,0.16,0.07
+woodland.riparian,-0.15,0.16,0.24
+macrophyte,-0.16,0.20,0.01
+bedrock.percent,-0.17,-0.13,0.15
+stable.bank,-0.22,-0.22,0.39
+dissolved.oxygen,-0.27,-0.14,-0.30
+riffle.percent,-0.29,-0.26,-0.17
+current.speed,-0.33,-0.16,-0.29
+boulders.presence,-0.34,0.08,-0.02
+cobble.percent,-0.39,0.15,0.09

@@ -1,0 +1,507 @@
+> ## ___ 3.4.2 | nestedness ---------------------------------------
+> ### ______ environmental ---------------------------------------
+> library("vegan")
+> ####### forward model selection for each variable set
+> ### instream
+> rda<-dbrda(phylo.beta.sne ~ ., data= env.instream.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ instream_PC1 + instream_PC2 + instream_PC3, data = env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs       F Pr(>F)
+Model      3 -0.01346 -0.6126      1
+Residual 134  0.98158               
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=env.instream.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=env.instream.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.instream.PCs<- subset(env.instream.PCs, select=terms)
++ } else {
++   red.env.instream.PCs<-data.frame(row.names = rownames(env.instream.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### hydrophysio
+> rda<-dbrda(phylo.beta.sne ~ ., data= env.hydrophysio.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ hydrophysio_PC1 + hydrophysio_PC2 + hydrophysio_PC3, data = env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs     F Pr(>F)
+Model      3  0.01046 0.488  0.673
+Residual 134  0.95766             
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=env.hydrophysio.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=env.hydrophysio.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.hydrophysio.PCs<- subset(env.hydrophysio.PCs, select=terms)
++ } else {
++   red.env.hydrophysio.PCs<-data.frame(row.names = rownames(env.hydrophysio.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### climate
+> rda<-dbrda(phylo.beta.sne ~ ., data= env.climate.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ climate_PC1 + climate_PC2 + climate_PC3 + climate_PC4, data = env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model      4 -0.02537 -0.849      1
+Residual 133  0.99349              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=env.climate.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=env.climate.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.climate.PCs<- subset(env.climate.PCs, select=terms)
++ } else {
++   red.env.climate.PCs<-data.frame(row.names = rownames(env.climate.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### landcover
+> rda<-dbrda(phylo.beta.sne ~ ., data= env.landcover.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ landcover_PC1 + landcover_PC2 + landcover_PC3 + landcover_PC4 + landcover_PC5 + landcover_PC6, data = env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model      6  0.01750 0.4019  0.871
+Residual 131  0.95062              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=env.landcover.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=env.landcover.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.landcover.PCs<- subset(env.landcover.PCs, select=terms)
++ } else {
++   red.env.landcover.PCs<-data.frame(row.names = rownames(env.landcover.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### geology
+> rda<-dbrda(phylo.beta.sne ~ ., data= env.geology.PCs, sqrt.dist=FALSE, add=FALSE)
+Error in dimnames(u) <- list(dnam[[1]], c(axnam, negnam)) : 
+  length of 'dimnames' [2] not equal to array extent
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ landcover_PC1 + landcover_PC2 + landcover_PC3 + landcover_PC4 + landcover_PC5 + landcover_PC6, data = env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model      6  0.01750 0.4019  0.884
+Residual 131  0.95062              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=env.geology.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=env.geology.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.geology.PCs<- subset(env.geology.PCs, select=terms)
++ } else {
++   red.env.geology.PCs<-data.frame(row.names = rownames(env.geology.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### anthropogenic
+> rda<-dbrda(phylo.beta.sne ~ ., data= env.anthropogenic.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ anthropogenic_PC1 + anthropogenic_PC2 + anthropogenic_PC3, data = env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model      3  0.00224 0.1036  0.908
+Residual 134  0.96588              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=env.anthropogenic.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=env.anthropogenic.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.anthropogenic.PCs<- subset(env.anthropogenic.PCs, select=terms)
++ } else {
++   red.env.anthropogenic.PCs<-data.frame(row.names = rownames(env.anthropogenic.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+
+
+
+> ### ______ spatial ---------------------------------------
+> ####### SP_MEM_LAND
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_MEM_LAND, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ LAND_MEM1 + LAND_MEM2 + LAND_MEM3 + LAND_MEM4 + LAND_MEM5 + LAND_MEM6 + LAND_MEM7 + LAND_MEM8 + LAND_MEM9 + LAND_MEM10 + LAND_MEM11 + LAND_MEM12 + LAND_MEM13 + LAND_MEM14 + LAND_MEM15 + LAND_MEM16 + LAND_MEM17 + LAND_MEM18 + LAND_MEM19 + LAND_MEM20 + LAND_MEM21 + LAND_MEM22 + LAND_MEM23 + LAND_MEM24 + LAND_MEM25 + LAND_MEM26 + LAND_MEM27 + LAND_MEM28 + LAND_MEM29 + LAND_MEM30 + LAND_MEM31 + LAND_MEM32 + LAND_MEM33 + LAND_MEM34 + LAND_MEM35 + LAND_MEM36 + LAND_MEM37 + 
+    LAND_MEM38 + LAND_MEM39 + LAND_MEM40 + LAND_MEM41 + LAND_MEM42 + LAND_MEM43 + LAND_MEM44, data = SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+         Df SumOfSqs      F Pr(>F)
+Model    44  0.26696 0.8047  0.778
+Residual 93  0.70116              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_MEM_LAND, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_MEM_LAND, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_LAND<- subset(SP_MEM_LAND, select=terms)
++ } else {
++   red.SP_MEM_LAND<-data.frame(row.names = rownames(SP_MEM_LAND)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ######## SP_MEM_HYDRO
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_MEM_HYDRO, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ HYDRO_MEM1 + HYDRO_MEM2 + HYDRO_MEM3 + HYDRO_MEM4 + HYDRO_MEM5 + HYDRO_MEM6 + HYDRO_MEM7 + HYDRO_MEM8, data = SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model      8  0.01342 0.2267  0.983
+Residual 129  0.95469              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_MEM_HYDRO, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_MEM_HYDRO, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_HYDRO<- subset(SP_MEM_HYDRO, select=terms)
++ } else {
++   red.SP_MEM_HYDRO<-data.frame(row.names = rownames(SP_MEM_HYDRO)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_MEM_UPSTR_TOTAL
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_MEM_UPSTR_TOTAL, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ UPTOTAL_MEM1 + UPTOTAL_MEM2 + UPTOTAL_MEM3 + UPTOTAL_MEM4 + UPTOTAL_MEM5 + UPTOTAL_MEM6 + UPTOTAL_MEM7 + UPTOTAL_MEM8 + UPTOTAL_MEM9 + UPTOTAL_MEM10 + UPTOTAL_MEM11 + UPTOTAL_MEM12 + UPTOTAL_MEM13 + UPTOTAL_MEM14 + UPTOTAL_MEM15 + UPTOTAL_MEM16 + UPTOTAL_MEM17 + UPTOTAL_MEM18 + UPTOTAL_MEM19 + UPTOTAL_MEM20 + UPTOTAL_MEM21 + UPTOTAL_MEM22 + UPTOTAL_MEM23 + UPTOTAL_MEM24 + UPTOTAL_MEM25 + UPTOTAL_MEM26 + UPTOTAL_MEM27 + UPTOTAL_MEM28 + UPTOTAL_MEM29 + UPTOTAL_MEM30, 
+    data = SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs     F Pr(>F)
+Model     30  0.16297 0.722  0.829
+Residual 107  0.80514             
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_MEM_UPSTR_TOTAL, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_MEM_UPSTR_TOTAL, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_TOTAL<- subset(SP_MEM_UPSTR_TOTAL, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_TOTAL<-data.frame(row.names = rownames(SP_MEM_UPSTR_TOTAL)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_MEM_UPSTR_NET
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_MEM_UPSTR_NET, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ UPNET_MEM1 + UPNET_MEM2 + UPNET_MEM3 + UPNET_MEM4 + UPNET_MEM5 + UPNET_MEM6 + UPNET_MEM7 + UPNET_MEM8 + UPNET_MEM9 + UPNET_MEM10 + UPNET_MEM11 + UPNET_MEM12 + UPNET_MEM13 + UPNET_MEM14 + UPNET_MEM15 + UPNET_MEM16 + UPNET_MEM17 + UPNET_MEM18 + UPNET_MEM19 + UPNET_MEM20 + UPNET_MEM21 + UPNET_MEM22 + UPNET_MEM23 + UPNET_MEM24 + UPNET_MEM25 + UPNET_MEM26 + UPNET_MEM27 + UPNET_MEM28 + UPNET_MEM29 + UPNET_MEM30 + UPNET_MEM31 + UPNET_MEM32, data = SP_MEM_UPSTR_NET, sqrt.dist = FALSE, 
+    add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     32  0.16344 0.6665  0.885
+Residual 105  0.80468              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_MEM_UPSTR_NET, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_MEM_UPSTR_NET, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_NET<- subset(SP_MEM_UPSTR_NET, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_NET<-data.frame(row.names = rownames(SP_MEM_UPSTR_NET)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_UW
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_AEM_TDN_UW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ AEM_TD_UW_V1 + AEM_TD_UW_V2 + AEM_TD_UW_V3 + AEM_TD_UW_V5 + AEM_TD_UW_V6 + AEM_TD_UW_V7 + AEM_TD_UW_V9 + AEM_TD_UW_V12 + AEM_TD_UW_V17 + AEM_TD_UW_V18 + AEM_TD_UW_V20 + AEM_TD_UW_V24 + AEM_TD_UW_V28 + AEM_TD_UW_V129, data = SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     14  0.01587 0.1464  0.996
+Residual 123  0.95225              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_AEM_TDN_UW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_AEM_TDN_UW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_UW<- subset(SP_AEM_TDN_UW, select=terms)
++ } else {
++   red.SP_AEM_TDN_UW<-data.frame(row.names = rownames(SP_AEM_TDN_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DAMW
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_AEM_TDN_DAMW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ AEM_TD_DAM_V1 + AEM_TD_DAM_V2 + AEM_TD_DAM_V3 + AEM_TD_DAM_V4 + AEM_TD_DAM_V5 + AEM_TD_DAM_V6 + AEM_TD_DAM_V7 + AEM_TD_DAM_V8 + AEM_TD_DAM_V10 + AEM_TD_DAM_V11 + AEM_TD_DAM_V16 + AEM_TD_DAM_V17 + AEM_TD_DAM_V24 + AEM_TD_DAM_V32 + AEM_TD_DAM_V116, data = SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     15  0.05256 0.4669  0.952
+Residual 122  0.91556              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_AEM_TDN_DAMW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_AEM_TDN_DAMW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DAMW<- subset(SP_AEM_TDN_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DAMW<-data.frame(row.names = rownames(SP_AEM_TDN_DAMW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DISTW
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_AEM_TDN_DISTW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ AEM_TD_DIST_V1 + AEM_TD_DIST_V2 + AEM_TD_DIST_V3 + AEM_TD_DIST_V5 + AEM_TD_DIST_V6 + AEM_TD_DIST_V7 + AEM_TD_DIST_V8 + AEM_TD_DIST_V9 + AEM_TD_DIST_V11 + AEM_TD_DIST_V12 + AEM_TD_DIST_V13 + AEM_TD_DIST_V17 + AEM_TD_DIST_V19 + AEM_TD_DIST_V28 + AEM_TD_DIST_V44, data = SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     15  0.03638 0.3176  0.986
+Residual 122  0.93174              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_AEM_TDN_DISTW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_AEM_TDN_DISTW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DISTW<- subset(SP_AEM_TDN_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DISTW<-data.frame(row.names = rownames(SP_AEM_TDN_DISTW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_UW
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_AEM_TUP_UW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ AEM_TU_UW_V1 + AEM_TU_UW_V2 + AEM_TU_UW_V3 + AEM_TU_UW_V4 + AEM_TU_UW_V7 + AEM_TU_UW_V13 + AEM_TU_UW_V14 + AEM_TU_UW_V18 + AEM_TU_UW_V27 + AEM_TU_UW_V43 + AEM_TU_UW_V90 + AEM_TU_UW_V91 + AEM_TU_UW_V95 + AEM_TU_UW_V96 + AEM_TU_UW_V98 + AEM_TU_UW_V99 + AEM_TU_UW_V101 + AEM_TU_UW_V102 + AEM_TU_UW_V103 + AEM_TU_UW_V105 + AEM_TU_UW_V106 + AEM_TU_UW_V109 + AEM_TU_UW_V111 + AEM_TU_UW_V131, data = SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     24  0.13822 0.7842  0.748
+Residual 113  0.82990              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_AEM_TUP_UW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_AEM_TUP_UW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_UW<- subset(SP_AEM_TUP_UW, select=terms)
++ } else {
++   red.SP_AEM_TUP_UW<-data.frame(row.names = rownames(SP_AEM_TUP_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_DAMW
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_AEM_TUP_DAMW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ AEM_TU_DAM_V1 + AEM_TU_DAM_V2 + AEM_TU_DAM_V3 + AEM_TU_DAM_V4 + AEM_TU_DAM_V6 + AEM_TU_DAM_V7 + AEM_TU_DAM_V23 + AEM_TU_DAM_V45 + AEM_TU_DAM_V48 + AEM_TU_DAM_V92 + AEM_TU_DAM_V100 + AEM_TU_DAM_V104 + AEM_TU_DAM_V105 + AEM_TU_DAM_V109 + AEM_TU_DAM_V117 + AEM_TU_DAM_V120, data = SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     16  0.11983 1.0683  0.373
+Residual 121  0.84829              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_AEM_TUP_DAMW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_AEM_TUP_DAMW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DAMW<- subset(SP_AEM_TUP_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DAMW<-data.frame(row.names = rownames(SP_AEM_TUP_DAMW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_DISTW
+> rda<-dbrda(phylo.beta.sne ~ ., data= SP_AEM_TUP_DISTW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = phylo.beta.sne ~ AEM_TU_DIST_V1 + AEM_TU_DIST_V2 + AEM_TU_DIST_V3 + AEM_TU_DIST_V4 + AEM_TU_DIST_V7 + AEM_TU_DIST_V13 + AEM_TU_DIST_V19 + AEM_TU_DIST_V44 + AEM_TU_DIST_V50 + AEM_TU_DIST_V75 + AEM_TU_DIST_V83 + AEM_TU_DIST_V110 + AEM_TU_DIST_V113 + AEM_TU_DIST_V114 + AEM_TU_DIST_V117 + AEM_TU_DIST_V118 + AEM_TU_DIST_V120 + AEM_TU_DIST_V126 + AEM_TU_DIST_V128, data = SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     19  0.12729 0.9402  0.525
+Residual 118  0.84083              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(phylo.beta.sne ~1, data=SP_AEM_TUP_DISTW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(phylo.beta.sne ~., data=SP_AEM_TUP_DISTW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DISTW<- subset(SP_AEM_TUP_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DISTW<-data.frame(row.names = rownames(SP_AEM_TUP_DISTW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found

@@ -1,0 +1,523 @@
+> ### _2.3 | Phylogenetic Alpha ---------------------------------------------------
+> ### ___ environmental selection ---------------------------------------------------
+> library("vegan")
+> ####### forward model selection for each variable set
+> ### instream
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ instream_PC1 + instream_PC2 + instream_PC3, data = env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      3   0.0448 1.5275  0.226
+Residual 134   1.3099              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=env.instream.PCs)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=env.instream.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.instream.PCs<- subset(env.instream.PCs, select=terms)
++ } else {
++   red.env.instream.PCs<-data.frame(row.names = rownames(env.instream.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### hydrophysio
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ hydrophysio_PC1 + hydrophysio_PC2 + hydrophysio_PC3, data = env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      3  0.04291 1.4611  0.187
+Residual 134  1.31179              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=env.hydrophysio.PCs)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=env.hydrophysio.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.hydrophysio.PCs<- subset(env.hydrophysio.PCs, select=terms)
++ } else {
++   red.env.hydrophysio.PCs<-data.frame(row.names = rownames(env.hydrophysio.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### climate
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ climate_PC1 + climate_PC2 + climate_PC3 + climate_PC4, data = env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      4  0.03066 0.7699  0.554
+Residual 133  1.32404              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=env.climate.PCs)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=env.climate.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.climate.PCs<- subset(env.climate.PCs, select=terms)
++ } else {
++   red.env.climate.PCs<-data.frame(row.names = rownames(env.climate.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### landcover
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ landcover_PC1 + landcover_PC2 + landcover_PC3 + landcover_PC4 + landcover_PC5 + landcover_PC6, data = env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      6  0.09063 1.5653   0.16
+Residual 131  1.26408              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=env.landcover.PCs)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=env.landcover.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.landcover.PCs<- subset(env.landcover.PCs, select=terms)
++ } else {
++   red.env.landcover.PCs<-data.frame(row.names = rownames(env.landcover.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### geology
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= env.geology.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ geology_PC1 + geology_PC2, data = env.geology.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      2  0.00331 0.1656  0.854
+Residual 135  1.35139              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=env.geology.PCs)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=env.geology.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.geology.PCs<- subset(env.geology.PCs, select=terms)
++ } else {
++   red.env.geology.PCs<-data.frame(row.names = rownames(env.geology.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ### anthropogenic
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ anthropogenic_PC1 + anthropogenic_PC2 + anthropogenic_PC3, data = env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      3  0.03532 1.1956  0.319
+Residual 134  1.31939              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=env.anthropogenic.PCs)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=env.anthropogenic.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.anthropogenic.PCs<- subset(env.anthropogenic.PCs, select=terms)
++ } else {
++   red.env.anthropogenic.PCs<-data.frame(row.names = rownames(env.anthropogenic.PCs)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> #### combine sig factors from model selection into one dataframe
+> ENV_select <- cbind.data.frame(red.env.instream.PCs,red.env.hydrophysio.PCs,red.env.climate.PCs,red.env.landcover.PCs,red.env.geology.PCs,red.env.anthropogenic.PCs)
+> usdm::vif(ENV_select)
+Error in terms.formula(formula, data = data) : 
+  '.' in formula and no 'data' argument
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data= ENV_select)
+Error in terms.formula(formula, "Condition", data = data) : 
+  '.' in formula and no 'data' argument
+  
+  
+> ### ___ spatial selection ---------------------------------------------------
+> ####### forward model selection for each variable set
+> ######## SP_MEM_LAND
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ LAND_MEM1 + LAND_MEM2 + LAND_MEM3 + LAND_MEM4 + LAND_MEM5 + LAND_MEM6 + LAND_MEM7 + LAND_MEM8 + LAND_MEM9 + LAND_MEM10 + LAND_MEM11 + LAND_MEM12 + LAND_MEM13 + LAND_MEM14 + LAND_MEM15 + LAND_MEM16 + LAND_MEM17 + LAND_MEM18 + LAND_MEM19 + LAND_MEM20 + LAND_MEM21 + LAND_MEM22 + LAND_MEM23 + LAND_MEM24 + LAND_MEM25 + LAND_MEM26 + LAND_MEM27 + LAND_MEM28 + LAND_MEM29 + LAND_MEM30 + LAND_MEM31 + LAND_MEM32 + LAND_MEM33 + LAND_MEM34 + LAND_MEM35 + 
+    LAND_MEM36 + LAND_MEM37 + LAND_MEM38 + LAND_MEM39 + LAND_MEM40 + LAND_MEM41 + LAND_MEM42 + LAND_MEM43 + LAND_MEM44, data = SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+         Df Variance      F Pr(>F)
+Model    44  0.43433 0.9974   0.47
+Residual 93  0.92038              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_MEM_LAND)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_MEM_LAND)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_LAND<- subset(SP_MEM_LAND, select=terms)
++ } else {
++   red.SP_MEM_LAND<-data.frame(row.names = rownames(SP_MEM_LAND)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ######## SP_MEM_HYDRO
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ HYDRO_MEM1 + HYDRO_MEM2 + HYDRO_MEM3 + HYDRO_MEM4 + HYDRO_MEM5 + HYDRO_MEM6 + HYDRO_MEM7 + HYDRO_MEM8, data = SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model      8  0.05955 0.7415  0.671
+Residual 129  1.29515              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_MEM_HYDRO)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_MEM_HYDRO)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_HYDRO<- subset(SP_MEM_HYDRO, select=terms)
++ } else {
++   red.SP_MEM_HYDRO<-data.frame(row.names = rownames(SP_MEM_HYDRO)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_MEM_UPSTR_TOTAL
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ UPTOTAL_MEM1 + UPTOTAL_MEM2 + UPTOTAL_MEM3 + UPTOTAL_MEM4 + UPTOTAL_MEM5 + UPTOTAL_MEM6 + UPTOTAL_MEM7 + UPTOTAL_MEM8 + UPTOTAL_MEM9 + UPTOTAL_MEM10 + UPTOTAL_MEM11 + UPTOTAL_MEM12 + UPTOTAL_MEM13 + UPTOTAL_MEM14 + UPTOTAL_MEM15 + UPTOTAL_MEM16 + UPTOTAL_MEM17 + UPTOTAL_MEM18 + UPTOTAL_MEM19 + UPTOTAL_MEM20 + UPTOTAL_MEM21 + UPTOTAL_MEM22 + UPTOTAL_MEM23 + UPTOTAL_MEM24 + UPTOTAL_MEM25 + UPTOTAL_MEM26 + UPTOTAL_MEM27 + UPTOTAL_MEM28 + UPTOTAL_MEM29 + 
+    UPTOTAL_MEM30, data = SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     30  0.30219 1.0241  0.444
+Residual 107  1.05251              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_MEM_UPSTR_TOTAL)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_MEM_UPSTR_TOTAL)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_TOTAL<- subset(SP_MEM_UPSTR_TOTAL, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_TOTAL<-data.frame(row.names = rownames(SP_MEM_UPSTR_TOTAL)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_MEM_UPSTR_NET
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_MEM_UPSTR_NET, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ UPNET_MEM1 + UPNET_MEM2 + UPNET_MEM3 + UPNET_MEM4 + UPNET_MEM5 + UPNET_MEM6 + UPNET_MEM7 + UPNET_MEM8 + UPNET_MEM9 + UPNET_MEM10 + UPNET_MEM11 + UPNET_MEM12 + UPNET_MEM13 + UPNET_MEM14 + UPNET_MEM15 + UPNET_MEM16 + UPNET_MEM17 + UPNET_MEM18 + UPNET_MEM19 + UPNET_MEM20 + UPNET_MEM21 + UPNET_MEM22 + UPNET_MEM23 + UPNET_MEM24 + UPNET_MEM25 + UPNET_MEM26 + UPNET_MEM27 + UPNET_MEM28 + UPNET_MEM29 + UPNET_MEM30 + UPNET_MEM31 + UPNET_MEM32, data = SP_MEM_UPSTR_NET, 
+    sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     32  0.27881 0.8503   0.67
+Residual 105  1.07589              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_MEM_UPSTR_NET)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_MEM_UPSTR_NET)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_NET<- subset(SP_MEM_UPSTR_NET, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_NET<-data.frame(row.names = rownames(SP_MEM_UPSTR_NET)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_UW
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ AEM_TD_UW_V1 + AEM_TD_UW_V2 + AEM_TD_UW_V3 + AEM_TD_UW_V5 + AEM_TD_UW_V6 + AEM_TD_UW_V7 + AEM_TD_UW_V9 + AEM_TD_UW_V12 + AEM_TD_UW_V17 + AEM_TD_UW_V18 + AEM_TD_UW_V20 + AEM_TD_UW_V24 + AEM_TD_UW_V28 + AEM_TD_UW_V129, data = SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     14  0.09175 0.6382   0.82
+Residual 123  1.26296              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_AEM_TDN_UW)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_AEM_TDN_UW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_UW<- subset(SP_AEM_TDN_UW, select=terms)
++ } else {
++   red.SP_AEM_TDN_UW<-data.frame(row.names = rownames(SP_AEM_TDN_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DAMW
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ AEM_TD_DAM_V1 + AEM_TD_DAM_V2 + AEM_TD_DAM_V3 + AEM_TD_DAM_V4 + AEM_TD_DAM_V5 + AEM_TD_DAM_V6 + AEM_TD_DAM_V7 + AEM_TD_DAM_V8 + AEM_TD_DAM_V10 + AEM_TD_DAM_V11 + AEM_TD_DAM_V16 + AEM_TD_DAM_V17 + AEM_TD_DAM_V24 + AEM_TD_DAM_V32 + AEM_TD_DAM_V116, data = SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     15  0.12866 0.8535  0.623
+Residual 122  1.22604              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_AEM_TDN_DAMW)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_AEM_TDN_DAMW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DAMW<- subset(SP_AEM_TDN_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DAMW<-data.frame(row.names = rownames(SP_AEM_TDN_DAMW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DISTW
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ AEM_TD_DIST_V1 + AEM_TD_DIST_V2 + AEM_TD_DIST_V3 + AEM_TD_DIST_V5 + AEM_TD_DIST_V6 + AEM_TD_DIST_V7 + AEM_TD_DIST_V8 + AEM_TD_DIST_V9 + AEM_TD_DIST_V11 + AEM_TD_DIST_V12 + AEM_TD_DIST_V13 + AEM_TD_DIST_V17 + AEM_TD_DIST_V19 + AEM_TD_DIST_V28 + AEM_TD_DIST_V44, data = SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     15  0.12199 0.8049   0.69
+Residual 122  1.23271              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_AEM_TDN_DISTW)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_AEM_TDN_DISTW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DISTW<- subset(SP_AEM_TDN_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DISTW<-data.frame(row.names = rownames(SP_AEM_TDN_DISTW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_UW
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ AEM_TU_UW_V1 + AEM_TU_UW_V2 + AEM_TU_UW_V3 + AEM_TU_UW_V4 + AEM_TU_UW_V7 + AEM_TU_UW_V13 + AEM_TU_UW_V14 + AEM_TU_UW_V18 + AEM_TU_UW_V27 + AEM_TU_UW_V43 + AEM_TU_UW_V90 + AEM_TU_UW_V91 + AEM_TU_UW_V95 + AEM_TU_UW_V96 + AEM_TU_UW_V98 + AEM_TU_UW_V99 + AEM_TU_UW_V101 + AEM_TU_UW_V102 + AEM_TU_UW_V103 + AEM_TU_UW_V105 + AEM_TU_UW_V106 + AEM_TU_UW_V109 + AEM_TU_UW_V111 + AEM_TU_UW_V131, data = SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     24  0.25109 1.0712  0.376
+Residual 113  1.10361              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_AEM_TUP_UW)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_AEM_TUP_UW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_UW<- subset(SP_AEM_TUP_UW, select=terms)
++ } else {
++   red.SP_AEM_TUP_UW<-data.frame(row.names = rownames(SP_AEM_TUP_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_DAMW 
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ AEM_TU_DAM_V1 + AEM_TU_DAM_V2 + AEM_TU_DAM_V3 + AEM_TU_DAM_V4 + AEM_TU_DAM_V6 + AEM_TU_DAM_V7 + AEM_TU_DAM_V23 + AEM_TU_DAM_V45 + AEM_TU_DAM_V48 + AEM_TU_DAM_V92 + AEM_TU_DAM_V100 + AEM_TU_DAM_V104 + AEM_TU_DAM_V105 + AEM_TU_DAM_V109 + AEM_TU_DAM_V117 + AEM_TU_DAM_V120, data = SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance     F Pr(>F)
+Model     16  0.22373 1.496  0.114
+Residual 121  1.13097             
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_AEM_TUP_DAMW)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_AEM_TUP_DAMW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DAMW<- subset(SP_AEM_TUP_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DAMW<-data.frame(row.names = rownames(SP_AEM_TUP_DAMW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_DISTW
+> rda<-rda(phylogenetic.alpha$Phylogenetic_Diversity ~ ., data= SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = phylogenetic.alpha$Phylogenetic_Diversity ~ AEM_TU_DIST_V1 + AEM_TU_DIST_V2 + AEM_TU_DIST_V3 + AEM_TU_DIST_V4 + AEM_TU_DIST_V7 + AEM_TU_DIST_V13 + AEM_TU_DIST_V19 + AEM_TU_DIST_V44 + AEM_TU_DIST_V50 + AEM_TU_DIST_V75 + AEM_TU_DIST_V83 + AEM_TU_DIST_V110 + AEM_TU_DIST_V113 + AEM_TU_DIST_V114 + AEM_TU_DIST_V117 + AEM_TU_DIST_V118 + AEM_TU_DIST_V120 + AEM_TU_DIST_V126 + AEM_TU_DIST_V128, data = SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     19  0.21502 1.1717  0.312
+Residual 118  1.13969              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~1, data=SP_AEM_TUP_DISTW)
++   mod1 <- rda(phylogenetic.alpha$Phylogenetic_Diversity ~., data=SP_AEM_TUP_DISTW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DISTW<- subset(SP_AEM_TUP_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DISTW<-data.frame(row.names = rownames(SP_AEM_TUP_DISTW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### GET SELECTED TERMS
+> SP_select<- cbind.data.frame(red.SP_MEM_LAND, red.SP_MEM_HYDRO, red.SP_MEM_UPSTR_TOTAL, 
++                              red.SP_MEM_UPSTR_NET, red.SP_AEM_TDN_UW, red.SP_AEM_TDN_DAMW, 
++                              red.SP_AEM_TDN_DISTW, red.SP_AEM_TUP_UW, red.SP_AEM_TUP_DAMW, red.SP_AEM_TUP_DISTW)
+> usdm::vif(SP_select)
+Error in terms.formula(formula, data = data) : 
+  '.' in formula and no 'data' argument
+  

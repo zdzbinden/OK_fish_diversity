@@ -1,0 +1,768 @@
+> ### _2.2 | Functional Alpha ---------------------------------------------------
+> ### ___ environmental selection ---------------------------------------------------
+> library("vegan")
+> ####### forward model selection for each variable set
+> ### instream
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ instream_PC1 + instream_PC2 + instream_PC3, data = env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)   
+Model      3 0.0012114 5.1183  0.004 **
+Residual 134 0.0105720                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=env.instream.PCs)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=env.instream.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.instream.PCs<- subset(env.instream.PCs, select=terms)
++ } else {
++   red.env.instream.PCs<-data.frame(row.names = rownames(env.instream.PCs)) 
++ }
+> model$anova
+                  R2.adj Df     AIC      F  Pr(>F)   
++ instream_PC3  0.058142  1 -619.15 9.4572 0.00264 **
++ instream_PC2  0.071174  1 -620.09 2.9082 0.08987 . 
+<All variables> 0.082722                             
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### hydrophysio
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ hydrophysio_PC1 + hydrophysio_PC2 + hydrophysio_PC3, data = env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance     F Pr(>F)  
+Model      3 0.0006696 2.691  0.047 *
+Residual 134 0.0111138               
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=env.hydrophysio.PCs)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=env.hydrophysio.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.hydrophysio.PCs<- subset(env.hydrophysio.PCs, select=terms)
++ } else {
++   red.env.hydrophysio.PCs<-data.frame(row.names = rownames(env.hydrophysio.PCs)) 
++ }
+> model$anova
+NULL
+> remove(mod0,mod1,model)
+> 
+> ### climate
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ climate_PC1 + climate_PC2 + climate_PC3 + climate_PC4, data = env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)  
+Model      4 0.0008845 2.6984  0.037 *
+Residual 133 0.0108989                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=env.climate.PCs)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=env.climate.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.climate.PCs<- subset(env.climate.PCs, select=terms)
++ } else {
++   red.env.climate.PCs<-data.frame(row.names = rownames(env.climate.PCs)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F  Pr(>F)   
++ climate_PC1   0.041312  1 -616.7 6.9036 0.00969 **
+<All variables> 0.047246                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### landcover
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ landcover_PC1 + landcover_PC2 + landcover_PC3 + landcover_PC4 + landcover_PC5 + landcover_PC6, data = env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)   
+Model      6 0.0014952 3.1731   0.01 **
+Residual 131 0.0102882                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=env.landcover.PCs)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=env.landcover.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.landcover.PCs<- subset(env.landcover.PCs, select=terms)
++ } else {
++   red.env.landcover.PCs<-data.frame(row.names = rownames(env.landcover.PCs)) 
++ }
+> model$anova
+                  R2.adj Df     AIC      F  Pr(>F)   
++ landcover_PC1 0.055343  1 -618.74 9.0262 0.00321 **
+<All variables> 0.086900                             
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### geology
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= env.geology.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ geology_PC1 + geology_PC2, data = env.geology.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)  
+Model      2 0.0004589 2.7351  0.076 .
+Residual 135 0.0113245                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=env.geology.PCs)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=env.geology.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.geology.PCs<- subset(env.geology.PCs, select=terms)
++ } else {
++   red.env.geology.PCs<-data.frame(row.names = rownames(env.geology.PCs)) 
++ }
+> model$anova
+NULL
+> remove(mod0,mod1,model)
+> 
+> ### anthropogenic
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ anthropogenic_PC1 + anthropogenic_PC2 + anthropogenic_PC3, data = env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)  
+Model      3 0.0008147 3.3178  0.021 *
+Residual 134 0.0109687                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=env.anthropogenic.PCs)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=env.anthropogenic.PCs)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.anthropogenic.PCs<- subset(env.anthropogenic.PCs, select=terms)
++ } else {
++   red.env.anthropogenic.PCs<-data.frame(row.names = rownames(env.anthropogenic.PCs)) 
++ }
+> model$anova
+NULL
+> remove(mod0,mod1,model)
+> 
+> #### combine sig factors from model selection into one dataframe
+> ENV_select <- cbind.data.frame(red.env.instream.PCs,red.env.hydrophysio.PCs,red.env.climate.PCs,red.env.landcover.PCs,red.env.geology.PCs,red.env.anthropogenic.PCs)
+> usdm::vif(ENV_select)
+      Variables      VIF
+1  instream_PC3 1.114271
+2  instream_PC2 1.022622
+3   climate_PC1 2.159349
+4 landcover_PC1 2.338576
+> rda<-rda(functional.richness$Functional_Richness ~., data= ENV_select)
+> RsquareAdj(rda)
+$r.squared
+[1] 0.1254661
+
+$adj.r.squared
+[1] 0.09916429
+
+> anova(rda)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ instream_PC3 + instream_PC2 + climate_PC1 + landcover_PC1, data = ENV_select)
+          Df  Variance      F Pr(>F)   
+Model      4 0.0014784 4.7703  0.003 **
+Residual 133 0.0103050                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+> ### ___ spatial selection ---------------------------------------------------
+> ####### forward model selection for each variable set
+> ######## SP_MEM_LAND
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ LAND_MEM1 + LAND_MEM2 + LAND_MEM3 + LAND_MEM4 + LAND_MEM5 + LAND_MEM6 + LAND_MEM7 + LAND_MEM8 + LAND_MEM9 + LAND_MEM10 + LAND_MEM11 + LAND_MEM12 + LAND_MEM13 + LAND_MEM14 + LAND_MEM15 + LAND_MEM16 + LAND_MEM17 + LAND_MEM18 + LAND_MEM19 + LAND_MEM20 + LAND_MEM21 + LAND_MEM22 + LAND_MEM23 + LAND_MEM24 + LAND_MEM25 + LAND_MEM26 + LAND_MEM27 + LAND_MEM28 + LAND_MEM29 + LAND_MEM30 + LAND_MEM31 + LAND_MEM32 + LAND_MEM33 + LAND_MEM34 + LAND_MEM35 + 
+    LAND_MEM36 + LAND_MEM37 + LAND_MEM38 + LAND_MEM39 + LAND_MEM40 + LAND_MEM41 + LAND_MEM42 + LAND_MEM43 + LAND_MEM44, data = SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+         Df  Variance      F Pr(>F)
+Model    44 0.0041302 1.1407  0.277
+Residual 93 0.0076532              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_MEM_LAND)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_MEM_LAND)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_LAND<- subset(SP_MEM_LAND, select=terms)
++ } else {
++   red.SP_MEM_LAND<-data.frame(row.names = rownames(SP_MEM_LAND)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ######## SP_MEM_HYDRO
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ HYDRO_MEM1 + HYDRO_MEM2 + HYDRO_MEM3 + HYDRO_MEM4 + HYDRO_MEM5 + HYDRO_MEM6 + HYDRO_MEM7 + HYDRO_MEM8, data = SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)
+Model      8 0.0006106 0.8813  0.533
+Residual 129 0.0111728              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_MEM_HYDRO)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_MEM_HYDRO)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_HYDRO<- subset(SP_MEM_HYDRO, select=terms)
++ } else {
++   red.SP_MEM_HYDRO<-data.frame(row.names = rownames(SP_MEM_HYDRO)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_MEM_UPSTR_TOTAL
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPTOTAL_MEM1 + UPTOTAL_MEM2 + UPTOTAL_MEM3 + UPTOTAL_MEM4 + UPTOTAL_MEM5 + UPTOTAL_MEM6 + UPTOTAL_MEM7 + UPTOTAL_MEM8 + UPTOTAL_MEM9 + UPTOTAL_MEM10 + UPTOTAL_MEM11 + UPTOTAL_MEM12 + UPTOTAL_MEM13 + UPTOTAL_MEM14 + UPTOTAL_MEM15 + UPTOTAL_MEM16 + UPTOTAL_MEM17 + UPTOTAL_MEM18 + UPTOTAL_MEM19 + UPTOTAL_MEM20 + UPTOTAL_MEM21 + UPTOTAL_MEM22 + UPTOTAL_MEM23 + UPTOTAL_MEM24 + UPTOTAL_MEM25 + UPTOTAL_MEM26 + UPTOTAL_MEM27 + UPTOTAL_MEM28 + UPTOTAL_MEM29 + 
+    UPTOTAL_MEM30, data = SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)  
+Model     30 0.0033995 1.4462  0.093 .
+Residual 107 0.0083839                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_MEM_UPSTR_TOTAL)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_MEM_UPSTR_TOTAL)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_TOTAL<- subset(SP_MEM_UPSTR_TOTAL, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_TOTAL<-data.frame(row.names = rownames(SP_MEM_UPSTR_TOTAL)) 
++ }
+> model$anova
+                  R2.adj Df     AIC      F  Pr(>F)  
++ UPTOTAL_MEM3  0.035674  1 -615.89 6.0681 0.01491 *
++ UPTOTAL_MEM6  0.070750  1 -620.03 6.1336 0.01405 *
+<All variables> 0.089015                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_MEM_UPSTR_NET
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_MEM_UPSTR_NET, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPNET_MEM1 + UPNET_MEM2 + UPNET_MEM3 + UPNET_MEM4 + UPNET_MEM5 + UPNET_MEM6 + UPNET_MEM7 + UPNET_MEM8 + UPNET_MEM9 + UPNET_MEM10 + UPNET_MEM11 + UPNET_MEM12 + UPNET_MEM13 + UPNET_MEM14 + UPNET_MEM15 + UPNET_MEM16 + UPNET_MEM17 + UPNET_MEM18 + UPNET_MEM19 + UPNET_MEM20 + UPNET_MEM21 + UPNET_MEM22 + UPNET_MEM23 + UPNET_MEM24 + UPNET_MEM25 + UPNET_MEM26 + UPNET_MEM27 + UPNET_MEM28 + UPNET_MEM29 + UPNET_MEM30 + UPNET_MEM31 + UPNET_MEM32, data = SP_MEM_UPSTR_NET, 
+    sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)  
+Model     32 0.0038168 1.5721  0.039 *
+Residual 105 0.0079666                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_MEM_UPSTR_NET)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_MEM_UPSTR_NET)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_NET<- subset(SP_MEM_UPSTR_NET, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_NET<-data.frame(row.names = rownames(SP_MEM_UPSTR_NET)) 
++ }
+> model$anova
+                  R2.adj Df     AIC      F  Pr(>F)   
++ UPNET_MEM32   0.050216  1 -617.99 8.2433 0.00492 **
++ UPNET_MEM4    0.087822  1 -622.58 6.6069 0.01117 * 
++ UPNET_MEM8    0.114063  1 -625.64 4.9986 0.02636 * 
+<All variables> 0.117871                             
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TDN_UW
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ AEM_TD_UW_V1 + AEM_TD_UW_V2 + AEM_TD_UW_V3 + AEM_TD_UW_V5 + AEM_TD_UW_V6 + AEM_TD_UW_V7 + AEM_TD_UW_V9 + AEM_TD_UW_V12 + AEM_TD_UW_V17 + AEM_TD_UW_V18 + AEM_TD_UW_V20 + AEM_TD_UW_V24 + AEM_TD_UW_V28 + AEM_TD_UW_V129, data = SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)
+Model     14 0.0011139 0.9172  0.561
+Residual 123 0.0106695              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_AEM_TDN_UW)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_AEM_TDN_UW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_UW<- subset(SP_AEM_TDN_UW, select=terms)
++ } else {
++   red.SP_AEM_TDN_UW<-data.frame(row.names = rownames(SP_AEM_TDN_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DAMW
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ AEM_TD_DAM_V1 + AEM_TD_DAM_V2 + AEM_TD_DAM_V3 + AEM_TD_DAM_V4 + AEM_TD_DAM_V5 + AEM_TD_DAM_V6 + AEM_TD_DAM_V7 + AEM_TD_DAM_V8 + AEM_TD_DAM_V10 + AEM_TD_DAM_V11 + AEM_TD_DAM_V16 + AEM_TD_DAM_V17 + AEM_TD_DAM_V24 + AEM_TD_DAM_V32 + AEM_TD_DAM_V116, data = SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df Variance      F Pr(>F)
+Model     15 0.001521 1.2054  0.281
+Residual 122 0.010263              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_AEM_TDN_DAMW)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_AEM_TDN_DAMW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DAMW<- subset(SP_AEM_TDN_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DAMW<-data.frame(row.names = rownames(SP_AEM_TDN_DAMW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TDN_DISTW
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ AEM_TD_DIST_V1 + AEM_TD_DIST_V2 + AEM_TD_DIST_V3 + AEM_TD_DIST_V5 + AEM_TD_DIST_V6 + AEM_TD_DIST_V7 + AEM_TD_DIST_V8 + AEM_TD_DIST_V9 + AEM_TD_DIST_V11 + AEM_TD_DIST_V12 + AEM_TD_DIST_V13 + AEM_TD_DIST_V17 + AEM_TD_DIST_V19 + AEM_TD_DIST_V28 + AEM_TD_DIST_V44, data = SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)
+Model     15 0.0017751 1.4425  0.153
+Residual 122 0.0100083              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_AEM_TDN_DISTW)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_AEM_TDN_DISTW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DISTW<- subset(SP_AEM_TDN_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DISTW<-data.frame(row.names = rownames(SP_AEM_TDN_DISTW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_UW
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ AEM_TU_UW_V1 + AEM_TU_UW_V2 + AEM_TU_UW_V3 + AEM_TU_UW_V4 + AEM_TU_UW_V7 + AEM_TU_UW_V13 + AEM_TU_UW_V14 + AEM_TU_UW_V18 + AEM_TU_UW_V27 + AEM_TU_UW_V43 + AEM_TU_UW_V90 + AEM_TU_UW_V91 + AEM_TU_UW_V95 + AEM_TU_UW_V96 + AEM_TU_UW_V98 + AEM_TU_UW_V99 + AEM_TU_UW_V101 + AEM_TU_UW_V102 + AEM_TU_UW_V103 + AEM_TU_UW_V105 + AEM_TU_UW_V106 + AEM_TU_UW_V109 + AEM_TU_UW_V111 + AEM_TU_UW_V131, data = SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)
+Model     24 0.0024771 1.2533  0.226
+Residual 113 0.0093063              
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_AEM_TUP_UW)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_AEM_TUP_UW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_UW<- subset(SP_AEM_TUP_UW, select=terms)
++ } else {
++   red.SP_AEM_TUP_UW<-data.frame(row.names = rownames(SP_AEM_TUP_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_DAMW 
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ AEM_TU_DAM_V1 + AEM_TU_DAM_V2 + AEM_TU_DAM_V3 + AEM_TU_DAM_V4 + AEM_TU_DAM_V6 + AEM_TU_DAM_V7 + AEM_TU_DAM_V23 + AEM_TU_DAM_V45 + AEM_TU_DAM_V48 + AEM_TU_DAM_V92 + AEM_TU_DAM_V100 + AEM_TU_DAM_V104 + AEM_TU_DAM_V105 + AEM_TU_DAM_V109 + AEM_TU_DAM_V117 + AEM_TU_DAM_V120, data = SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)  
+Model     16 0.0022334 1.7686  0.046 *
+Residual 121 0.0095500                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_AEM_TUP_DAMW)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_AEM_TUP_DAMW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DAMW<- subset(SP_AEM_TUP_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DAMW<-data.frame(row.names = rownames(SP_AEM_TUP_DAMW)) 
++ }
+> model$anova
+NULL
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TUP_DISTW
+> rda<-rda(functional.richness$Functional_Richness ~ ., data= SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ AEM_TU_DIST_V1 + AEM_TU_DIST_V2 + AEM_TU_DIST_V3 + AEM_TU_DIST_V4 + AEM_TU_DIST_V7 + AEM_TU_DIST_V13 + AEM_TU_DIST_V19 + AEM_TU_DIST_V44 + AEM_TU_DIST_V50 + AEM_TU_DIST_V75 + AEM_TU_DIST_V83 + AEM_TU_DIST_V110 + AEM_TU_DIST_V113 + AEM_TU_DIST_V114 + AEM_TU_DIST_V117 + AEM_TU_DIST_V118 + AEM_TU_DIST_V120 + AEM_TU_DIST_V126 + AEM_TU_DIST_V128, data = SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df  Variance      F Pr(>F)  
+Model     19 0.0024083 1.5954  0.061 .
+Residual 118 0.0093751                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] <0.1){
++   mod0 <- rda(functional.richness$Functional_Richness ~1, data=SP_AEM_TUP_DISTW)
++   mod1 <- rda(functional.richness$Functional_Richness ~., data=SP_AEM_TUP_DISTW)
++   model <-ordiR2step(mod0,mod1, Pin=0.1, permutations=how(nperm=99999), 
++                      R2permutations=99999, direction="forward", R2scope = TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DISTW<- subset(SP_AEM_TUP_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DISTW<-data.frame(row.names = rownames(SP_AEM_TUP_DISTW)) 
++ }
+> model$anova
+NULL
+> remove(mod0,mod1,model)
+> 
+> ########### GET SELECTED TERMS
+> SP_select<- cbind.data.frame(red.SP_MEM_LAND, red.SP_MEM_HYDRO, red.SP_MEM_UPSTR_TOTAL, 
++                              red.SP_MEM_UPSTR_NET, red.SP_AEM_TDN_UW, red.SP_AEM_TDN_DAMW, 
++                              red.SP_AEM_TDN_DISTW, red.SP_AEM_TUP_UW, red.SP_AEM_TUP_DAMW, red.SP_AEM_TUP_DISTW)
+> usdm::vif(SP_select)
+     Variables      VIF
+1 UPTOTAL_MEM3 1.089355
+2 UPTOTAL_MEM6 1.017533
+3  UPNET_MEM32 1.009879
+4   UPNET_MEM4 1.056570
+5   UPNET_MEM8 1.040439
+> ### multiple regression test to confirm all terms are significantly related to response
+> rda<-rda(functional.richness$Functional_Richness~., data= SP_select)
+> RsquareAdj(rda)
+$r.squared
+[1] 0.1783357
+
+$adj.r.squared
+[1] 0.1472121
+
+> anova(rda)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPTOTAL_MEM3 + UPTOTAL_MEM6 + UPNET_MEM32 + UPNET_MEM4 + UPNET_MEM8, data = SP_select)
+          Df  Variance      F Pr(>F)    
+Model      5 0.0021014 5.7299  0.001 ***
+Residual 132 0.0096820                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> sig.terms<-anova(rda, by="term", permutations=99999)
+> sig.terms
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPTOTAL_MEM3 + UPTOTAL_MEM6 + UPNET_MEM32 + UPNET_MEM4 + UPNET_MEM8, data = SP_select)
+              Df  Variance      F  Pr(>F)   
+UPTOTAL_MEM3   1 0.0005033 6.8618 0.00964 **
+UPTOTAL_MEM6   1 0.0004902 6.6836 0.01026 * 
+UPNET_MEM32    1 0.0005820 7.9341 0.00569 **
+UPNET_MEM4     1 0.0003029 4.1292 0.04455 * 
+UPNET_MEM8     1 0.0002230 3.0409 0.08419 . 
+Residual     132 0.0096820                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+> ### ___ variation partitioning ---------------------------------------------------
+> ### Partial redundancy analysis of models (taxon alpha)
+> ### partial RDA of full environmental set
+> comb <- cbind(SP_select, ENV_select)
+> rda.all<-rda(functional.richness$Functional_Richness ~ ., data=comb)
+> RsquareAdj(rda.all)
+$r.squared
+[1] 0.2850763
+
+$adj.r.squared
+[1] 0.24074
+
+> anova(rda.all)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPTOTAL_MEM3 + UPTOTAL_MEM6 + UPNET_MEM32 + UPNET_MEM4 + instream_PC3 + instream_PC2 + climate_PC1 + landcover_PC1, data = comb)
+          Df  Variance      F Pr(>F)    
+Model      8 0.0033592 6.4299  0.001 ***
+Residual 129 0.0084242                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #anova(rda.all, by="term", permutations=99999)
+> #### Partial Redundancy Analysis of selected model from procedure above
+> partial.reg <- varpart(functional.richness$Functional_Richness, SP_select, ENV_select)
+> partial.reg
+
+Partition of variance in RDA 
+
+Call: varpart(Y = functional.richness$Functional_Richness, X = SP_select, ENV_select)
+
+Explanatory tables:
+X1:  SP_select
+X2:  ENV_select 
+
+No. of explanatory tables: 2 
+Total variation (SS): 1.6143 
+            Variance: 0.011783 
+No. of observations: 138 
+
+Partition table:
+                     Df R.squared Adj.R.squared Testable
+[a+b] = X1            4   0.15941       0.13413     TRUE
+[b+c] = X2            4   0.12547       0.09916     TRUE
+[a+b+c] = X1+X2       8   0.28508       0.24074     TRUE
+Individual fractions                                    
+[a] = X1|X2           4                 0.14158     TRUE
+[b]                   0                -0.00745    FALSE
+[c] = X2|X1           4                 0.10661     TRUE
+[d] = Residuals                         0.75926    FALSE
+---
+Use function ‘rda’ to test significance of fractions of interest
+> 
+> #### TESTING SIGNIFICANCE OF FRACTIONS
+> #### fraction [a]:
+> rda.pure.spatial<-rda(functional.richness$Functional_Richness ~ . + Condition(as.matrix(ENV_select)), data=SP_select)
+> RsquareAdj(rda.pure.spatial)
+$r.squared
+[1] 0.1596103
+
+$adj.r.squared
+[1] 0.1415757
+
+> anova(rda.pure.spatial)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPTOTAL_MEM3 + UPTOTAL_MEM6 + UPNET_MEM32 + UPNET_MEM4 + Condition(as.matrix(ENV_select)), data = SP_select)
+          Df  Variance   F Pr(>F)    
+Model      4 0.0018808 7.2  0.001 ***
+Residual 129 0.0084242               
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.pure.spatial, by="term", permutations=99999)
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPTOTAL_MEM3 + UPTOTAL_MEM6 + UPNET_MEM32 + UPNET_MEM4 + Condition(as.matrix(ENV_select)), data = SP_select)
+              Df  Variance       F  Pr(>F)    
+UPTOTAL_MEM3   1 0.0007534 11.5373 0.00089 ***
+UPTOTAL_MEM6   1 0.0003075  4.7088 0.03235 *  
+UPNET_MEM32    1 0.0007475 11.4458 0.00093 ***
+UPNET_MEM4     1 0.0000724  1.1080 0.29605    
+Residual     129 0.0084242                    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [c]:
+> rda.pure.environ<-rda(functional.richness$Functional_Richness ~ . + Condition(as.matrix(SP_select)), data=ENV_select)
+> RsquareAdj(rda.pure.environ)
+$r.squared
+[1] 0.1256695
+
+$adj.r.squared
+[1] 0.1066141
+
+> anova(rda.pure.environ)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ instream_PC3 + instream_PC2 + climate_PC1 + landcover_PC1 + Condition(as.matrix(SP_select)), data = ENV_select)
+          Df  Variance      F Pr(>F)    
+Model      4 0.0014808 5.6689  0.001 ***
+Residual 129 0.0084242                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.pure.environ, by="term", permutations=99999)
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ instream_PC3 + instream_PC2 + climate_PC1 + landcover_PC1 + Condition(as.matrix(SP_select)), data = ENV_select)
+               Df  Variance       F  Pr(>F)    
+instream_PC3    1 0.0007812 11.9623 0.00082 ***
+instream_PC2    1 0.0003419  5.2357 0.02392 *  
+climate_PC1     1 0.0003146  4.8169 0.02997 *  
+landcover_PC1   1 0.0000432  0.6608 0.41741    
+Residual      129 0.0084242                    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [a+b]:
+> rda.spatial<-rda(functional.richness$Functional_Richness ~., data= SP_select)
+> RsquareAdj(rda.spatial)
+$r.squared
+[1] 0.1594068
+
+$adj.r.squared
+[1] 0.1341258
+
+> anova(rda.spatial)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ UPTOTAL_MEM3 + UPTOTAL_MEM6 + UPNET_MEM32 + UPNET_MEM4, data = SP_select)
+          Df  Variance      F Pr(>F)    
+Model      4 0.0018784 6.3054  0.001 ***
+Residual 133 0.0099051                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [b+c]:
+> rda.envrion<-rda(functional.richness$Functional_Richness ~ ., data= ENV_select)
+> RsquareAdj(rda.envrion)
+$r.squared
+[1] 0.1254661
+
+$adj.r.squared
+[1] 0.09916429
+
+> anova(rda.envrion)
+Permutation test for rda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ instream_PC3 + instream_PC2 + climate_PC1 + landcover_PC1, data = ENV_select)
+          Df  Variance      F Pr(>F)    
+Model      4 0.0014784 4.7703  0.001 ***
+Residual 133 0.0103050                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.envrion, by="term", permutations=99999)
+Permutation test for rda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 99999
+
+Model: rda(formula = functional.richness$Functional_Richness ~ instream_PC3 + instream_PC2 + climate_PC1 + landcover_PC1, data = ENV_select)
+               Df  Variance      F  Pr(>F)   
+instream_PC3    1 0.0007661 9.8878 0.00212 **
+instream_PC2    1 0.0002323 2.9985 0.08435 . 
+climate_PC1     1 0.0003802 4.9073 0.02785 * 
+landcover_PC1   1 0.0000997 1.2874 0.26083   
+Residual      133 0.0103050                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

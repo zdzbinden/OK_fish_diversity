@@ -1,0 +1,930 @@
+> ### _3.3 | Functional ---------------------------------------
+> ### ___ 3.3.1 | overall turnover ---------------------------------------
+> ### __  3.1.1 | Overall Turnover  ---------------------------------------
+> ### ______ environmental ---------------------------------------
+> library("vegan")
+> ####### forward model selection for each variable set
+> ### instream
+> rda<-dbrda(functional.beta.sor ~ ., data= env.instream.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ instream_PC1 + instream_PC2 + instream_PC3, data = env.instream.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model      3    3.412 4.7503  0.001 ***
+Residual 134   32.083                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=env.instream.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=env.instream.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.instream.PCs<- subset(env.instream.PCs, select=terms)
++ } else {
++   red.env.instream.PCs<-data.frame(row.names = rownames(env.instream.PCs)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ instream_PC1  0.034904  1 502.22 5.4365  0.001 ***
++ instream_PC3  0.068714  1 498.81 5.4000  0.001 ***
++ instream_PC2  0.077282  1 498.72 2.0465  0.014 *  
+<All variables> 0.077282                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### hydrophysio
+> rda<-dbrda(functional.beta.sor ~ ., data= env.hydrophysio.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ hydrophysio_PC1 + hydrophysio_PC2 + hydrophysio_PC3, data = env.hydrophysio.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs     F Pr(>F)   
+Model      3    1.861 2.472  0.002 **
+Residual 134   33.634                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=env.hydrophysio.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=env.hydrophysio.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.hydrophysio.PCs<- subset(env.hydrophysio.PCs, select=terms)
++ } else {
++   red.env.hydrophysio.PCs<-data.frame(row.names = rownames(env.hydrophysio.PCs)) 
++ }
+> model$anova
+                    R2.adj Df    AIC      F Pr(>F)   
++ hydrophysio_PC1 0.019423  1 504.23 3.3951  0.003 **
+<All variables>   0.032642                           
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### climate
+> rda<-dbrda(functional.beta.sor ~ ., data= env.climate.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ climate_PC1 + climate_PC2 + climate_PC3 + climate_PC4, data = env.climate.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model      4    3.247 3.3475  0.001 ***
+Residual 133   32.248                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=env.climate.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=env.climate.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.climate.PCs<- subset(env.climate.PCs, select=terms)
++ } else {
++   red.env.climate.PCs<-data.frame(row.names = rownames(env.climate.PCs)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ climate_PC1   0.043408  1 501.11 6.5835  0.001 ***
++ climate_PC2   0.061030  1 499.84 3.2332  0.001 ***
+<All variables> 0.066441                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### landcover
+> rda<-dbrda(functional.beta.sor ~ ., data= env.landcover.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ landcover_PC1 + landcover_PC2 + landcover_PC3 + landcover_PC4 + landcover_PC5 + landcover_PC6, data = env.landcover.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model      6    3.767 2.5926  0.001 ***
+Residual 131   31.727                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=env.landcover.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=env.landcover.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.landcover.PCs<- subset(env.landcover.PCs, select=terms)
++ } else {
++   red.env.landcover.PCs<-data.frame(row.names = rownames(env.landcover.PCs)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ landcover_PC1 0.055538  1 499.50 8.2522  0.001 ***
++ landcover_PC2 0.061643  1 499.76 1.7154  0.034 *  
+<All variables> 0.068808                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### geology
+> rda<-dbrda(functional.beta.sor ~ ., data= env.geology.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ geology_PC1 + geology_PC2, data = env.geology.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs    F Pr(>F)    
+Model      2    2.822 5.83  0.001 ***
+Residual 135   32.673                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=env.geology.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=env.geology.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.geology.PCs<- subset(env.geology.PCs, select=terms)
++ } else {
++   red.env.geology.PCs<-data.frame(row.names = rownames(env.geology.PCs)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ geology_PC1   0.044447  1 500.97 6.7250  0.001 ***
++ geology_PC2   0.066701  1 499.08 3.8596  0.001 ***
+<All variables> 0.066701                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ### anthropogenic
+> rda<-dbrda(functional.beta.sor ~ ., data= env.anthropogenic.PCs, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ anthropogenic_PC1 + anthropogenic_PC2 + anthropogenic_PC3, data = env.anthropogenic.PCs, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)   
+Model      3    1.607 2.1187  0.003 **
+Residual 134   33.888                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=env.anthropogenic.PCs, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=env.anthropogenic.PCs, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.env.anthropogenic.PCs<- subset(env.anthropogenic.PCs, select=terms)
++ } else {
++   red.env.anthropogenic.PCs<-data.frame(row.names = rownames(env.anthropogenic.PCs)) 
++ }
+> model$anova
+                      R2.adj Df    AIC      F Pr(>F)    
++ anthropogenic_PC1 0.017609  1 504.46 3.1598  0.001 ***
++ anthropogenic_PC2 0.025228  1 504.55 1.8839  0.033 *  
+<All variables>     0.025650                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> #### combine sig factors from model selection into one dataframe
+> ENV_select <- cbind.data.frame(red.env.instream.PCs,red.env.hydrophysio.PCs,red.env.climate.PCs,red.env.landcover.PCs,red.env.geology.PCs,red.env.anthropogenic.PCs)
+> 
+> rda<-dbrda(functional.beta.sor ~ ., data= ENV_select, sqrt.dist = FALSE, add = FALSE)
+> sig.terms<-anova(rda, by="term", permutations=999)
+> sig.terms
+Permutation test for dbrda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ instream_PC1 + instream_PC3 + instream_PC2 + hydrophysio_PC1 + climate_PC1 + climate_PC2 + landcover_PC1 + landcover_PC2 + geology_PC1 + geology_PC2 + anthropogenic_PC1 + anthropogenic_PC2, data = ENV_select, sqrt.dist = FALSE, add = FALSE)
+                   Df SumOfSqs      F Pr(>F)    
+instream_PC1        1   1.4777 6.4612  0.001 ***
+instream_PC3        1   1.4201 6.2095  0.001 ***
+instream_PC2        1   0.5143 2.2488  0.011 *  
+hydrophysio_PC1     1   0.5161 2.2566  0.009 ** 
+climate_PC1         1   0.4799 2.0982  0.018 *  
+climate_PC2         1   0.5536 2.4207  0.007 ** 
+landcover_PC1       1   0.3974 1.7375  0.037 *  
+landcover_PC2       1   0.2835 1.2395  0.227    
+geology_PC1         1   0.3051 1.3341  0.149    
+geology_PC2         1   0.5883 2.5723  0.002 ** 
+anthropogenic_PC1   1   0.2374 1.0383  0.363    
+anthropogenic_PC2   1   0.1345 0.5882  0.836    
+Residual          125  28.5871                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> ### remove non-sig vars
+> terms <- as.data.frame(attr(rda$terminfo$terms,"term.labels"))
+> terms[,2]<-sig.terms$`Pr(>F)`[-(length(sig.terms$`Pr(>F)`-1))]
+> terms<-terms[terms$V2<0.05,]
+> ENV_select<-subset(ENV_select, select=terms$`attr(rda$terminfo$terms, "term.labels")`)
+> vif<-usdm::vifstep(ENV_select, th=10)
+> ENV_select<-usdm::exclude(ENV_select, vif)
+> remove(rda,sig.terms,terms,vif)
+
+
+> ### ______ spatial ---------------------------------------
+> ####### SP_MEM_LAND
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_MEM_LAND, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ LAND_MEM1 + LAND_MEM2 + LAND_MEM3 + LAND_MEM4 + LAND_MEM5 + LAND_MEM6 + LAND_MEM7 + LAND_MEM8 + LAND_MEM9 + LAND_MEM10 + LAND_MEM11 + LAND_MEM12 + LAND_MEM13 + LAND_MEM14 + LAND_MEM15 + LAND_MEM16 + LAND_MEM17 + LAND_MEM18 + LAND_MEM19 + LAND_MEM20 + LAND_MEM21 + LAND_MEM22 + LAND_MEM23 + LAND_MEM24 + LAND_MEM25 + LAND_MEM26 + LAND_MEM27 + LAND_MEM28 + LAND_MEM29 + LAND_MEM30 + LAND_MEM31 + LAND_MEM32 + LAND_MEM33 + LAND_MEM34 + LAND_MEM35 + LAND_MEM36 + LAND_MEM37 + 
+    LAND_MEM38 + LAND_MEM39 + LAND_MEM40 + LAND_MEM41 + LAND_MEM42 + LAND_MEM43 + LAND_MEM44, data = SP_MEM_LAND, sqrt.dist = FALSE, add = FALSE)
+         Df SumOfSqs      F Pr(>F)    
+Model    44   15.159 1.5756  0.001 ***
+Residual 93   20.336                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_MEM_LAND, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_MEM_LAND, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_LAND<- subset(SP_MEM_LAND, select=terms)
++ } else {
++   red.SP_MEM_LAND<-data.frame(row.names = rownames(SP_MEM_LAND)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ LAND_MEM5     0.020840  1 504.05 3.5795  0.001 ***
++ LAND_MEM17    0.034149  1 503.39 2.6225  0.004 ** 
++ LAND_MEM1     0.044869  1 503.05 2.2911  0.006 ** 
++ LAND_MEM26    0.054507  1 502.84 2.1519  0.012 *  
++ LAND_MEM2     0.063439  1 502.70 2.0598  0.010 ** 
++ LAND_MEM14    0.071684  1 502.64 1.9698  0.024 *  
++ LAND_MEM28    0.079244  1 502.66 1.8791  0.020 *  
++ LAND_MEM6     0.086203  1 502.75 1.7990  0.044 *  
++ LAND_MEM44    0.092880  1 502.87 1.7599  0.045 *  
++ LAND_MEM21    0.098942  1 503.05 1.6777  0.042 *  
+<All variables> 0.195881                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ######## SP_MEM_HYDRO
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_MEM_HYDRO, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ HYDRO_MEM1 + HYDRO_MEM2 + HYDRO_MEM3 + HYDRO_MEM4 + HYDRO_MEM5 + HYDRO_MEM6 + HYDRO_MEM7 + HYDRO_MEM8, data = SP_MEM_HYDRO, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model      8    3.525 1.7777  0.001 ***
+Residual 129   31.970                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_MEM_HYDRO, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_MEM_HYDRO, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_HYDRO<- subset(SP_MEM_HYDRO, select=terms)
++ } else {
++   red.SP_MEM_HYDRO<-data.frame(row.names = rownames(SP_MEM_HYDRO)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ HYDRO_MEM1    0.026434  1 503.33 4.3122  0.001 ***
++ HYDRO_MEM2    0.042844  1 502.25 3.0375  0.002 ** 
+<All variables> 0.047795                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_MEM_UPSTR_TOTAL
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_MEM_UPSTR_TOTAL, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ UPTOTAL_MEM1 + UPTOTAL_MEM2 + UPTOTAL_MEM3 + UPTOTAL_MEM4 + UPTOTAL_MEM5 + UPTOTAL_MEM6 + UPTOTAL_MEM7 + UPTOTAL_MEM8 + UPTOTAL_MEM9 + UPTOTAL_MEM10 + UPTOTAL_MEM11 + UPTOTAL_MEM12 + UPTOTAL_MEM13 + UPTOTAL_MEM14 + UPTOTAL_MEM15 + UPTOTAL_MEM16 + UPTOTAL_MEM17 + UPTOTAL_MEM18 + UPTOTAL_MEM19 + UPTOTAL_MEM20 + UPTOTAL_MEM21 + UPTOTAL_MEM22 + UPTOTAL_MEM23 + UPTOTAL_MEM24 + UPTOTAL_MEM25 + UPTOTAL_MEM26 + UPTOTAL_MEM27 + UPTOTAL_MEM28 + UPTOTAL_MEM29 + UPTOTAL_MEM30, 
+    data = SP_MEM_UPSTR_TOTAL, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model     30   10.925 1.5859  0.001 ***
+Residual 107   24.570                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_MEM_UPSTR_TOTAL, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_MEM_UPSTR_TOTAL, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_TOTAL<- subset(SP_MEM_UPSTR_TOTAL, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_TOTAL<-data.frame(row.names = rownames(SP_MEM_UPSTR_TOTAL)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ UPTOTAL_MEM1  0.027017  1 503.25 4.3891  0.001 ***
++ UPTOTAL_MEM7  0.040512  1 502.56 2.6562  0.006 ** 
++ UPTOTAL_MEM4  0.053753  1 501.88 2.6296  0.005 ** 
++ UPTOTAL_MEM6  0.063200  1 501.68 2.1367  0.011 *  
++ UPTOTAL_MEM3  0.071791  1 501.58 2.0243  0.011 *  
++ UPTOTAL_MEM14 0.080070  1 501.51 1.9821  0.017 *  
++ UPTOTAL_MEM27 0.087069  1 501.60 1.8132  0.030 *  
++ UPTOTAL_MEM25 0.093755  1 501.72 1.7697  0.028 *  
++ UPTOTAL_MEM5  0.100203  1 501.86 1.7358  0.029 *  
++ UPTOTAL_MEM30 0.106468  1 502.01 1.7091  0.043 *  
+<All variables> 0.136014                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_MEM_UPSTR_NET
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_MEM_UPSTR_NET, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ UPNET_MEM1 + UPNET_MEM2 + UPNET_MEM3 + UPNET_MEM4 + UPNET_MEM5 + UPNET_MEM6 + UPNET_MEM7 + UPNET_MEM8 + UPNET_MEM9 + UPNET_MEM10 + UPNET_MEM11 + UPNET_MEM12 + UPNET_MEM13 + UPNET_MEM14 + UPNET_MEM15 + UPNET_MEM16 + UPNET_MEM17 + UPNET_MEM18 + UPNET_MEM19 + UPNET_MEM20 + UPNET_MEM21 + UPNET_MEM22 + UPNET_MEM23 + UPNET_MEM24 + UPNET_MEM25 + UPNET_MEM26 + UPNET_MEM27 + UPNET_MEM28 + UPNET_MEM29 + UPNET_MEM30 + UPNET_MEM31 + UPNET_MEM32, data = SP_MEM_UPSTR_NET, 
+    sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model     32   10.730 1.4216  0.001 ***
+Residual 105   24.765                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_MEM_UPSTR_NET, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_MEM_UPSTR_NET, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_MEM_UPSTR_NET<- subset(SP_MEM_UPSTR_NET, select=terms)
++ } else {
++   red.SP_MEM_UPSTR_NET<-data.frame(row.names = rownames(SP_MEM_UPSTR_NET)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ UPNET_MEM4    0.028020  1 503.12 4.5215  0.001 ***
++ UPNET_MEM14   0.037675  1 502.93 2.1567  0.019 *  
++ UPNET_MEM12   0.045968  1 502.91 1.9798  0.015 *  
++ UPNET_MEM32   0.053829  1 502.93 1.9222  0.025 *  
+<All variables> 0.115351                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TDN_UW
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_AEM_TDN_UW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ AEM_TD_UW_V1 + AEM_TD_UW_V2 + AEM_TD_UW_V3 + AEM_TD_UW_V5 + AEM_TD_UW_V6 + AEM_TD_UW_V7 + AEM_TD_UW_V9 + AEM_TD_UW_V12 + AEM_TD_UW_V17 + AEM_TD_UW_V18 + AEM_TD_UW_V20 + AEM_TD_UW_V24 + AEM_TD_UW_V28 + AEM_TD_UW_V129, data = SP_AEM_TDN_UW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model     14   6.0564 1.8075  0.001 ***
+Residual 123  29.4385                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_AEM_TDN_UW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_AEM_TDN_UW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_UW<- subset(SP_AEM_TDN_UW, select=terms)
++ } else {
++   red.SP_AEM_TDN_UW<-data.frame(row.names = rownames(SP_AEM_TDN_UW)) 
++ }
+> model$anova
+                  R2.adj Df    AIC      F Pr(>F)    
++ AEM_TD_UW_V1  0.035505  1 502.15 5.5170  0.001 ***
++ AEM_TD_UW_V3  0.051668  1 501.09 3.0224  0.001 ***
++ AEM_TD_UW_V7  0.060674  1 500.96 2.0869  0.015 *  
++ AEM_TD_UW_V9  0.068958  1 500.91 1.9911  0.015 *  
+<All variables> 0.085479                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TDN_DAMW
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_AEM_TDN_DAMW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ AEM_TD_DAM_V1 + AEM_TD_DAM_V2 + AEM_TD_DAM_V3 + AEM_TD_DAM_V4 + AEM_TD_DAM_V5 + AEM_TD_DAM_V6 + AEM_TD_DAM_V7 + AEM_TD_DAM_V8 + AEM_TD_DAM_V10 + AEM_TD_DAM_V11 + AEM_TD_DAM_V16 + AEM_TD_DAM_V17 + AEM_TD_DAM_V24 + AEM_TD_DAM_V32 + AEM_TD_DAM_V116, data = SP_AEM_TDN_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs     F Pr(>F)    
+Model     15    6.756 1.912  0.001 ***
+Residual 122   28.739                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_AEM_TDN_DAMW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_AEM_TDN_DAMW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DAMW<- subset(SP_AEM_TDN_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DAMW<-data.frame(row.names = rownames(SP_AEM_TDN_DAMW)) 
++ }
+> model$anova
+                   R2.adj Df    AIC      F Pr(>F)    
++ AEM_TD_DAM_V1  0.034712  1 502.25 5.4109  0.001 ***
++ AEM_TD_DAM_V3  0.048696  1 501.48 2.7328  0.003 ** 
++ AEM_TD_DAM_V7  0.058648  1 501.23 2.2082  0.007 ** 
++ AEM_TD_DAM_V10 0.068663  1 500.95 2.2170  0.007 ** 
++ AEM_TD_DAM_V17 0.077764  1 500.77 2.0969  0.011 *  
+<All variables>  0.100571                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TDN_DISTW
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_AEM_TDN_DISTW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ AEM_TD_DIST_V1 + AEM_TD_DIST_V2 + AEM_TD_DIST_V3 + AEM_TD_DIST_V5 + AEM_TD_DIST_V6 + AEM_TD_DIST_V7 + AEM_TD_DIST_V8 + AEM_TD_DIST_V9 + AEM_TD_DIST_V11 + AEM_TD_DIST_V12 + AEM_TD_DIST_V13 + AEM_TD_DIST_V17 + AEM_TD_DIST_V19 + AEM_TD_DIST_V28 + AEM_TD_DIST_V44, data = SP_AEM_TDN_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model     15   6.9122 1.9669  0.001 ***
+Residual 122  28.5827                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_AEM_TDN_DISTW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_AEM_TDN_DISTW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TDN_DISTW<- subset(SP_AEM_TDN_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TDN_DISTW<-data.frame(row.names = rownames(SP_AEM_TDN_DISTW)) 
++ }
+> model$anova
+                    R2.adj Df    AIC      F Pr(>F)    
++ AEM_TD_DIST_V1  0.035332  1 502.17 5.4938  0.001 ***
++ AEM_TD_DIST_V11 0.052404  1 500.99 3.1427  0.001 ***
++ AEM_TD_DIST_V3  0.068447  1 499.91 3.0220  0.002 ** 
++ AEM_TD_DIST_V7  0.080089  1 499.40 2.4458  0.002 ** 
++ AEM_TD_DIST_V13 0.085870  1 499.67 1.6681  0.043 *  
+<All variables>   0.104982                            
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TUP_UW
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_AEM_TUP_UW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ AEM_TU_UW_V1 + AEM_TU_UW_V2 + AEM_TU_UW_V3 + AEM_TU_UW_V4 + AEM_TU_UW_V7 + AEM_TU_UW_V13 + AEM_TU_UW_V14 + AEM_TU_UW_V18 + AEM_TU_UW_V27 + AEM_TU_UW_V43 + AEM_TU_UW_V90 + AEM_TU_UW_V91 + AEM_TU_UW_V95 + AEM_TU_UW_V96 + AEM_TU_UW_V98 + AEM_TU_UW_V99 + AEM_TU_UW_V101 + AEM_TU_UW_V102 + AEM_TU_UW_V103 + AEM_TU_UW_V105 + AEM_TU_UW_V106 + AEM_TU_UW_V109 + AEM_TU_UW_V111 + AEM_TU_UW_V131, data = SP_AEM_TUP_UW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     24   6.6687 1.0892  0.191
+Residual 113  28.8262              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_AEM_TUP_UW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_AEM_TUP_UW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_UW<- subset(SP_AEM_TUP_UW, select=terms)
++ } else {
++   red.SP_AEM_TUP_UW<-data.frame(row.names = rownames(SP_AEM_TUP_UW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########### SP_AEM_TUP_DAMW
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_AEM_TUP_DAMW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ AEM_TU_DAM_V1 + AEM_TU_DAM_V2 + AEM_TU_DAM_V3 + AEM_TU_DAM_V4 + AEM_TU_DAM_V6 + AEM_TU_DAM_V7 + AEM_TU_DAM_V23 + AEM_TU_DAM_V45 + AEM_TU_DAM_V48 + AEM_TU_DAM_V92 + AEM_TU_DAM_V100 + AEM_TU_DAM_V104 + AEM_TU_DAM_V105 + AEM_TU_DAM_V109 + AEM_TU_DAM_V117 + AEM_TU_DAM_V120, data = SP_AEM_TUP_DAMW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)  
+Model     16   4.7314 1.1631  0.068 .
+Residual 121  30.7635                
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_AEM_TUP_DAMW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_AEM_TUP_DAMW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DAMW<- subset(SP_AEM_TUP_DAMW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DAMW<-data.frame(row.names = rownames(SP_AEM_TUP_DAMW)) 
++ }
+> model$anova
+                    R2.adj Df    AIC      F Pr(>F)   
++ AEM_TU_DAM_V1   0.017670  1 504.46 3.1676  0.002 **
++ AEM_TU_DAM_V105 0.024321  1 504.67 1.7600  0.039 * 
+<All variables>   0.030320                           
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> remove(mod0,mod1,model)
+> 
+> ########### SP_AEM_TUP_DISTW
+> rda<-dbrda(functional.beta.sor ~ ., data= SP_AEM_TUP_DISTW, sqrt.dist=FALSE, add=FALSE)
+> sig<-anova(rda)
+> sig
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ AEM_TU_DIST_V1 + AEM_TU_DIST_V2 + AEM_TU_DIST_V3 + AEM_TU_DIST_V4 + AEM_TU_DIST_V7 + AEM_TU_DIST_V13 + AEM_TU_DIST_V19 + AEM_TU_DIST_V44 + AEM_TU_DIST_V50 + AEM_TU_DIST_V75 + AEM_TU_DIST_V83 + AEM_TU_DIST_V110 + AEM_TU_DIST_V113 + AEM_TU_DIST_V114 + AEM_TU_DIST_V117 + AEM_TU_DIST_V118 + AEM_TU_DIST_V120 + AEM_TU_DIST_V126 + AEM_TU_DIST_V128, data = SP_AEM_TUP_DISTW, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)
+Model     19   5.2986 1.0898  0.208
+Residual 118  30.1963              
+> if (sig$`Pr(>F)`[1] < 0.1){
++   mod0 <- capscale(functional.beta.sor ~1, data=SP_AEM_TUP_DISTW, sqrt.dist=FALSE, add=FALSE)
++   mod1 <- capscale(functional.beta.sor ~., data=SP_AEM_TUP_DISTW, sqrt.dist=FALSE, add=FALSE)
++   model <-ordiR2step(mod0,mod1, Pin=0.05, permutations=how(nperm=999), 
++                      R2permutations=999, direction="forward", R2scope=TRUE, trace=FALSE)
++   model$anova
++   terms <- attr(model$terminfo$terms,"term.labels")
++   red.SP_AEM_TUP_DISTW<- subset(SP_AEM_TUP_DISTW, select=terms)
++ } else {
++   red.SP_AEM_TUP_DISTW<-data.frame(row.names = rownames(SP_AEM_TUP_DISTW)) 
++ }
+> model$anova
+Error: object 'model' not found
+> remove(mod0,mod1,model)
+Warning messages:
+1: In remove(mod0, mod1, model) : object 'mod0' not found
+2: In remove(mod0, mod1, model) : object 'mod1' not found
+3: In remove(mod0, mod1, model) : object 'model' not found
+> 
+> ########## Combine select terms from different sets
+> SP_select<- cbind.data.frame(red.SP_MEM_LAND, red.SP_MEM_HYDRO, red.SP_MEM_UPSTR_TOTAL, 
++                              red.SP_MEM_UPSTR_NET, red.SP_AEM_TDN_UW, red.SP_AEM_TDN_DAMW, 
++                              red.SP_AEM_TDN_DISTW, red.SP_AEM_TUP_UW, red.SP_AEM_TUP_DAMW, red.SP_AEM_TUP_DISTW)
+> usdm::vif(SP_select)
+         Variables          VIF
+1        LAND_MEM5 9.939009e+00
+2       LAND_MEM17 6.189746e+00
+3        LAND_MEM1 4.393020e+01
+4       LAND_MEM26 1.125853e+00
+5        LAND_MEM2 2.648905e+01
+6       LAND_MEM14 2.235489e+00
+7       LAND_MEM28 1.769207e+00
+8        LAND_MEM6 6.318508e+00
+9       LAND_MEM44 1.103076e+00
+10      LAND_MEM21 2.116530e+00
+11      HYDRO_MEM1 3.991106e+01
+12      HYDRO_MEM2 5.735320e+00
+13    UPTOTAL_MEM1 2.965836e+01
+14    UPTOTAL_MEM7 1.020858e+01
+15    UPTOTAL_MEM4 1.274768e+01
+16    UPTOTAL_MEM6 1.889252e+01
+17    UPTOTAL_MEM3 4.080727e+00
+18   UPTOTAL_MEM14 6.545308e+00
+19   UPTOTAL_MEM27 1.235488e+00
+20   UPTOTAL_MEM25 1.466709e+00
+21    UPTOTAL_MEM5 4.424370e+01
+22   UPTOTAL_MEM30 1.491968e+00
+23      UPNET_MEM4 6.542990e+00
+24     UPNET_MEM14 5.367124e+00
+25     UPNET_MEM12 6.730585e+00
+26     UPNET_MEM32 1.519180e+00
+27    AEM_TD_UW_V1 1.300213e+05
+28    AEM_TD_UW_V3 2.610427e+03
+29    AEM_TD_UW_V7 4.621219e+01
+30    AEM_TD_UW_V9 3.365859e+00
+31   AEM_TD_DAM_V1 1.659996e+05
+32   AEM_TD_DAM_V3 4.235813e+02
+33   AEM_TD_DAM_V7 1.729237e+01
+34  AEM_TD_DAM_V10 9.252021e+00
+35  AEM_TD_DAM_V17 2.631150e+00
+36  AEM_TD_DIST_V1 1.854705e+05
+37 AEM_TD_DIST_V11 7.177340e+00
+38  AEM_TD_DIST_V3 2.140746e+03
+39  AEM_TD_DIST_V7 2.291360e+01
+40 AEM_TD_DIST_V13 5.508136e+00
+41   AEM_TU_DAM_V1 2.236769e+00
+42 AEM_TU_DAM_V105 1.599232e+00
+> vif<-usdm::vifstep(SP_select, th=10)
+> SP_select<-usdm::exclude(SP_select, vif)
+> ### multiple regression test to confirm all terms are significantly related to response
+> rda<-dbrda(functional.beta.sor ~., data= SP_select, sqrt.dist=FALSE, add = FALSE)
+> RsquareAdj(rda)
+$r.squared
+[1] 0.3661822
+
+$adj.r.squared
+[1] 0.165067
+
+> anova(rda)
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ LAND_MEM5 + LAND_MEM17 + LAND_MEM26 + LAND_MEM14 + LAND_MEM28 + LAND_MEM6 + LAND_MEM44 + LAND_MEM21 + HYDRO_MEM2 + UPTOTAL_MEM7 + UPTOTAL_MEM4 + UPTOTAL_MEM6 + UPTOTAL_MEM3 + UPTOTAL_MEM14 + UPTOTAL_MEM27 + UPTOTAL_MEM25 + UPTOTAL_MEM5 + UPTOTAL_MEM30 + UPNET_MEM4 + UPNET_MEM14 + UPNET_MEM12 + UPNET_MEM32 + AEM_TD_UW_V1 + AEM_TD_UW_V9 + AEM_TD_DAM_V3 + AEM_TD_DAM_V7 + AEM_TD_DAM_V10 + AEM_TD_DAM_V17 + AEM_TD_DIST_V11 + AEM_TD_DIST_V7 + AEM_TD_DIST_V13 + AEM_TU_DAM_V1 + 
+    AEM_TU_DAM_V105, data = SP_select, sqrt.dist = FALSE, add = FALSE)
+          Df SumOfSqs      F Pr(>F)    
+Model     33   12.998 1.8208  0.001 ***
+Residual 104   22.497                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> sig.terms<-anova(rda, by="term", permutations=999)
+> sig.terms
+Permutation test for dbrda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ LAND_MEM5 + LAND_MEM17 + LAND_MEM26 + LAND_MEM14 + LAND_MEM28 + LAND_MEM6 + LAND_MEM44 + LAND_MEM21 + HYDRO_MEM2 + UPTOTAL_MEM7 + UPTOTAL_MEM4 + UPTOTAL_MEM6 + UPTOTAL_MEM3 + UPTOTAL_MEM14 + UPTOTAL_MEM27 + UPTOTAL_MEM25 + UPTOTAL_MEM5 + UPTOTAL_MEM30 + UPNET_MEM4 + UPNET_MEM14 + UPNET_MEM12 + UPNET_MEM32 + AEM_TD_UW_V1 + AEM_TD_UW_V9 + AEM_TD_DAM_V3 + AEM_TD_DAM_V7 + AEM_TD_DAM_V10 + AEM_TD_DAM_V17 + AEM_TD_DIST_V11 + AEM_TD_DIST_V7 + AEM_TD_DIST_V13 + AEM_TU_DAM_V1 + 
+    AEM_TU_DAM_V105, data = SP_select, sqrt.dist = FALSE, add = FALSE)
+                 Df SumOfSqs      F Pr(>F)    
+LAND_MEM5         1   0.9751 4.5077  0.001 ***
+LAND_MEM17        1   0.6952 3.2135  0.002 ** 
+LAND_MEM26        1   0.5468 2.5276  0.008 ** 
+LAND_MEM14        1   0.5076 2.3464  0.006 ** 
+LAND_MEM28        1   0.4778 2.2086  0.012 *  
+LAND_MEM6         1   0.4476 2.0694  0.023 *  
+LAND_MEM44        1   0.4313 1.9937  0.020 *  
+LAND_MEM21        1   0.4193 1.9382  0.033 *  
+HYDRO_MEM2        1   0.4827 2.2314  0.013 *  
+UPTOTAL_MEM7      1   0.4522 2.0905  0.020 *  
+UPTOTAL_MEM4      1   0.2746 1.2694  0.191    
+UPTOTAL_MEM6      1   0.4617 2.1343  0.012 *  
+UPTOTAL_MEM3      1   0.5195 2.4017  0.007 ** 
+UPTOTAL_MEM14     1   0.3045 1.4074  0.145    
+UPTOTAL_MEM27     1   0.4252 1.9658  0.038 *  
+UPTOTAL_MEM25     1   0.3797 1.7551  0.052 .  
+UPTOTAL_MEM5      1   0.3450 1.5949  0.082 .  
+UPTOTAL_MEM30     1   0.3184 1.4718  0.117    
+UPNET_MEM4        1   0.4947 2.2871  0.008 ** 
+UPNET_MEM14       1   0.1663 0.7690  0.712    
+UPNET_MEM12       1   0.1725 0.7975  0.676    
+UPNET_MEM32       1   0.3045 1.4076  0.140    
+AEM_TD_UW_V1      1   0.4273 1.9752  0.026 *  
+AEM_TD_UW_V9      1   0.2868 1.3260  0.170    
+AEM_TD_DAM_V3     1   0.2232 1.0320  0.426    
+AEM_TD_DAM_V7     1   0.2876 1.3294  0.185    
+AEM_TD_DAM_V10    1   0.3718 1.7185  0.061 .  
+AEM_TD_DAM_V17    1   0.3434 1.5875  0.083 .  
+AEM_TD_DIST_V11   1   0.2495 1.1535  0.287    
+AEM_TD_DIST_V7    1   0.3046 1.4082  0.146    
+AEM_TD_DIST_V13   1   0.2752 1.2722  0.197    
+AEM_TU_DAM_V1     1   0.4367 2.0186  0.021 *  
+AEM_TU_DAM_V105   1   0.1894 0.8754  0.558    
+Residual        104  22.4973                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> ### remove non-sig vars
+
+> ### ______  variation partitioning ---------------------------------------
+> #### Partial Redundancy Analysis of selected model from procedure above
+> partial.reg <- varpart(functional.beta.sor, SP_select, ENV_select, sqrt.dist = F)
+> partial.reg
+
+Partition of squared  distance in dbRDA 
+
+Call: varpart(Y = functional.beta.sor, X = SP_select, ENV_select, sqrt.dist = F)
+
+Explanatory tables:
+X1:  SP_select
+X2:  ENV_select 
+
+No. of explanatory tables: 2 
+Total variation (SS): 35.495 
+No. of observations: 138 
+
+Partition table:
+                     Df R.squared Adj.R.squared Testable
+[a+b] = X1           16   0.23953       0.13897     TRUE
+[b+c] = X2            8   0.16611       0.11439     TRUE
+[a+b+c] = X1+X2      24   0.31858       0.17386     TRUE
+Individual fractions                                    
+[a] = X1|X2          16                 0.05946     TRUE
+[b]                   0                 0.07951    FALSE
+[c] = X2|X1           8                 0.03488     TRUE
+[d] = Residuals                         0.82614    FALSE
+---
+Use function ‘dbrda’ to test significance of fractions of interest
+> plot(partial.reg, cex=1.2, bg=c("royalblue1","olivedrab"), Xnames=c("Spatial","Environmental"))
+> #### TESTING SIGNIFICANCE OF FRACTIONS
+> #### factions [a+b+c]:
+> comb <- cbind(SP_select, ENV_select)
+> rda.all<-dbrda(functional.beta.sor ~ ., data = comb, sqrt.dist = F)
+> RsquareAdj(rda.all)
+$r.squared
+[1] 0.3185818
+
+$adj.r.squared
+[1] 0.1738558
+
+> anova(rda.all)
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ LAND_MEM5 + LAND_MEM17 + LAND_MEM26 + LAND_MEM14 + LAND_MEM28 + LAND_MEM6 + LAND_MEM44 + LAND_MEM21 + HYDRO_MEM2 + UPTOTAL_MEM7 + UPTOTAL_MEM6 + UPTOTAL_MEM3 + UPTOTAL_MEM27 + UPNET_MEM4 + AEM_TD_UW_V1 + AEM_TU_DAM_V1 + instream_PC1 + instream_PC3 + instream_PC2 + hydrophysio_PC1 + climate_PC1 + climate_PC2 + landcover_PC1 + geology_PC2, data = comb, sqrt.dist = F)
+          Df SumOfSqs      F Pr(>F)    
+Model     24   11.308 2.2013  0.001 ***
+Residual 113   24.187                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [a]:
+> rda.pure.spatial<-dbrda(functional.beta.sor ~ . + Condition(as.matrix(ENV_select)),data=SP_select, sqrt.dist = F)
+> RsquareAdj(rda.pure.spatial)
+$r.squared
+[1] 0.1524757
+
+$adj.r.squared
+[1] 0.05946402
+
+> anova(rda.pure.spatial)
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ LAND_MEM5 + LAND_MEM17 + LAND_MEM26 + LAND_MEM14 + LAND_MEM28 + LAND_MEM6 + LAND_MEM44 + LAND_MEM21 + HYDRO_MEM2 + UPTOTAL_MEM7 + UPTOTAL_MEM6 + UPTOTAL_MEM3 + UPTOTAL_MEM27 + UPNET_MEM4 + AEM_TD_UW_V1 + AEM_TU_DAM_V1 + Condition(as.matrix(ENV_select)), data = SP_select, sqrt.dist = F)
+          Df SumOfSqs      F Pr(>F)    
+Model     16   5.4121 1.5803  0.001 ***
+Residual 113  24.1869                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.pure.spatial, by="term", permutations=999)
+Permutation test for dbrda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ LAND_MEM5 + LAND_MEM17 + LAND_MEM26 + LAND_MEM14 + LAND_MEM28 + LAND_MEM6 + LAND_MEM44 + LAND_MEM21 + HYDRO_MEM2 + UPTOTAL_MEM7 + UPTOTAL_MEM6 + UPTOTAL_MEM3 + UPTOTAL_MEM27 + UPNET_MEM4 + AEM_TD_UW_V1 + AEM_TU_DAM_V1 + Condition(as.matrix(ENV_select)), data = SP_select, sqrt.dist = F)
+               Df SumOfSqs      F Pr(>F)    
+LAND_MEM5       1   0.1865 0.8712  0.587    
+LAND_MEM17      1   0.5234 2.4452  0.005 ** 
+LAND_MEM26      1   0.3820 1.7847  0.046 *  
+LAND_MEM14      1   0.2038 0.9521  0.486    
+LAND_MEM28      1   0.3407 1.5918  0.069 .  
+LAND_MEM6       1   0.2475 1.1562  0.293    
+LAND_MEM44      1   0.4354 2.0344  0.018 *  
+LAND_MEM21      1   0.3987 1.8626  0.041 *  
+HYDRO_MEM2      1   0.1917 0.8954  0.552    
+UPTOTAL_MEM7    1   0.2251 1.0514  0.408    
+UPTOTAL_MEM6    1   0.3868 1.8070  0.031 *  
+UPTOTAL_MEM3    1   0.5641 2.6354  0.001 ***
+UPTOTAL_MEM27   1   0.4174 1.9500  0.029 *  
+UPNET_MEM4      1   0.4307 2.0122  0.019 *  
+AEM_TD_UW_V1    1   0.2125 0.9927  0.465    
+AEM_TU_DAM_V1   1   0.2660 1.2428  0.211    
+Residual      113  24.1869                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [c]:
+> rda.pure.environ<-dbrda(functional.beta.sor ~ . + Condition(as.matrix(SP_select)),data=ENV_select, sqrt.dist = F)
+> RsquareAdj(rda.pure.environ)
+$r.squared
+[1] 0.07905112
+
+$adj.r.squared
+[1] 0.03488306
+
+> anova(rda.pure.environ)
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ instream_PC1 + instream_PC3 + instream_PC2 + hydrophysio_PC1 + climate_PC1 + climate_PC2 + landcover_PC1 + geology_PC2 + Condition(as.matrix(SP_select)), data = ENV_select, sqrt.dist = F)
+          Df SumOfSqs      F Pr(>F)    
+Model      8   2.8059 1.6386  0.001 ***
+Residual 113  24.1869                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.pure.environ, by="term", permutations=999)
+Permutation test for dbrda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ instream_PC1 + instream_PC3 + instream_PC2 + hydrophysio_PC1 + climate_PC1 + climate_PC2 + landcover_PC1 + geology_PC2 + Condition(as.matrix(SP_select)), data = ENV_select, sqrt.dist = F)
+                 Df SumOfSqs      F Pr(>F)    
+instream_PC1      1   0.4153 1.9404  0.019 *  
+instream_PC3      1   0.7600 3.5507  0.001 ***
+instream_PC2      1   0.3883 1.8141  0.032 *  
+hydrophysio_PC1   1   0.3936 1.8389  0.037 *  
+climate_PC1       1   0.1855 0.8667  0.575    
+climate_PC2       1   0.1436 0.6709  0.836    
+landcover_PC1     1   0.2156 1.0074  0.403    
+geology_PC2       1   0.3039 1.4200  0.145    
+Residual        113  24.1869                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [a+b]:
+> rda.spatial<-dbrda(functional.beta.sor ~ ., data= SP_select, sqrt.dist = F)
+> RsquareAdj(rda.spatial)
+$r.squared
+[1] 0.2395307
+
+$adj.r.squared
+[1] 0.1389727
+
+> anova(rda.spatial)
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ LAND_MEM5 + LAND_MEM17 + LAND_MEM26 + LAND_MEM14 + LAND_MEM28 + LAND_MEM6 + LAND_MEM44 + LAND_MEM21 + HYDRO_MEM2 + UPTOTAL_MEM7 + UPTOTAL_MEM6 + UPTOTAL_MEM3 + UPTOTAL_MEM27 + UPNET_MEM4 + AEM_TD_UW_V1 + AEM_TU_DAM_V1, data = SP_select, sqrt.dist = F)
+          Df SumOfSqs     F Pr(>F)    
+Model     16   8.5021 2.382  0.001 ***
+Residual 121  26.9928                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> #### fraction [b+c]:
+> rda.envrion<-dbrda(functional.beta.sor ~ ., data= ENV_select, sqrt.dist = F)
+> RsquareAdj(rda.envrion)
+$r.squared
+[1] 0.1661061
+
+$adj.r.squared
+[1] 0.1143918
+
+> anova(rda.envrion)
+Permutation test for dbrda under reduced model
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ instream_PC1 + instream_PC3 + instream_PC2 + hydrophysio_PC1 + climate_PC1 + climate_PC2 + landcover_PC1 + geology_PC2, data = ENV_select, sqrt.dist = F)
+          Df SumOfSqs     F Pr(>F)    
+Model      8   5.8959 3.212  0.001 ***
+Residual 129  29.5990                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> anova(rda.envrion, by="term", permutations=999)
+Permutation test for dbrda under reduced model
+Terms added sequentially (first to last)
+Permutation: free
+Number of permutations: 999
+
+Model: dbrda(formula = functional.beta.sor ~ instream_PC1 + instream_PC3 + instream_PC2 + hydrophysio_PC1 + climate_PC1 + climate_PC2 + landcover_PC1 + geology_PC2, data = ENV_select, sqrt.dist = F)
+                 Df SumOfSqs      F Pr(>F)    
+instream_PC1      1   1.4777 6.4400  0.001 ***
+instream_PC3      1   1.4201 6.1891  0.001 ***
+instream_PC2      1   0.5143 2.2414  0.009 ** 
+hydrophysio_PC1   1   0.5161 2.2492  0.012 *  
+climate_PC1       1   0.4799 2.0914  0.025 *  
+climate_PC2       1   0.5536 2.4128  0.006 ** 
+landcover_PC1     1   0.3974 1.7318  0.044 *  
+geology_PC2       1   0.5370 2.3402  0.011 *  
+Residual        129  29.5990                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
